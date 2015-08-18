@@ -71,7 +71,7 @@ public class Activator extends AbstractUIPlugin {
 
 	public Preferences getConfigPrefs() {
 		if (configPrefs == null)
-			configPrefs = new ConfigurationScope().getNode(PLUGIN_ID);
+			configPrefs = ConfigurationScope.INSTANCE.getNode(PLUGIN_ID);
 		return configPrefs;
 	}
 

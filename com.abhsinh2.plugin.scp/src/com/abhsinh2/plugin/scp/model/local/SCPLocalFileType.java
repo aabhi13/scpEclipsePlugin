@@ -2,12 +2,8 @@ package com.abhsinh2.plugin.scp.model.local;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 public abstract class SCPLocalFileType implements Comparable<SCPLocalFileType> {
-	private static final ISharedImages PLATFORM_IMAGES = PlatformUI
-			.getWorkbench().getSharedImages();
 
 	private final String id;
 	private final String printName;

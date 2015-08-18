@@ -9,9 +9,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -22,12 +19,14 @@ import com.abhsinh2.plugin.scp.model.local.SCPLocalFileType;
 public class CopyHandler extends AbstractHandler {
 	
 	Shell shell;
+	ExecutionEvent event;
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		System.out.println("Hello SCP");
 		
 		this.shell = HandlerUtil.getActiveShell(event);
+		this.event = event;
 
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
@@ -78,7 +77,8 @@ public class CopyHandler extends AbstractHandler {
 		//shell.setText("SCP");
 		//shell.setBounds(100, 100, 200, 100);
 		//shell.setLayout(new FillLayout(SWT.VERTICAL));
-		LocationDialog dialog = new LocationDialog(shell, localLocations);
+		LocationDialog dialog = new LocationDialog(shell, event, localLocations);
+		
 		if (dialog.open() != InputDialog.OK)
 			return;
 

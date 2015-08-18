@@ -61,6 +61,7 @@ public class SCPRemoteLocation implements IAdaptable {
 				+ ", remoteLocation=" + remoteLocation + "]";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class adapter) {
 		return null;
