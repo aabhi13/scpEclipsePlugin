@@ -2,12 +2,16 @@ package com.abhsinh2.plugin.scp.model.local;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.IClassFile;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 
 public abstract class SCPLocalFileType implements Comparable<SCPLocalFileType> {
-	private static final ISharedImages PLATFORM_IMAGES = PlatformUI
-			.getWorkbench().getSharedImages();
 
 	private final String id;
 	private final String printName;
@@ -58,8 +62,101 @@ public abstract class SCPLocalFileType implements Comparable<SCPLocalFileType> {
 		}
 	};
 
+	public static final SCPLocalFileType WORKBENCH_PROJECT = new SCPLocalFileType(
+			"WBProj", "WorkbenchProject", 3) {
+
+		public ISCPLocalLocation newLocation(Object obj) {
+			if (!(obj instanceof IProject))
+				return null;
+			return new SCPLocalResource(this, (IProject) obj);
+		}
+	};
+
+	public static final SCPLocalFileType JAVA_PROJECT = new SCPLocalFileType(
+			"JProj", "Java Project", 4) {
+		public ISCPLocalLocation newLocation(Object obj) {
+			if (!(obj instanceof IJavaProject))
+				return null;
+			return new SCPLocalJavaElement(this, (IJavaProject) obj);
+		}
+	};
+
+	public static final SCPLocalFileType JAVA_PACKAGE_ROOT = new SCPLocalFileType(
+			"JPkgRoot", "Java Package Root", 5) {
+
+		public ISCPLocalLocation newLocation(Object obj) {
+			if (!(obj instanceof IPackageFragmentRoot))
+				return null;
+			return new SCPLocalJavaElement(this, (IPackageFragmentRoot) obj);
+		}
+	};
+
+	public static final SCPLocalFileType JAVA_PACKAGE = new SCPLocalFileType(
+			"JPkg", "Java Package", 6) {
+
+		public ISCPLocalLocation newLocation(Object obj) {
+			if (!(obj instanceof IPackageFragment))
+				return null;
+			return new SCPLocalJavaElement(this, (IPackageFragment) obj);
+		}
+	};
+
+	public static final SCPLocalFileType JAVA_CLASS_FILE = new SCPLocalFileType(
+			"JClass", "Java Class File", 7) {
+
+		public ISCPLocalLocation newLocation(Object obj) {
+			if (!(obj instanceof IClassFile))
+				return null;
+			return new SCPLocalJavaElement(this, (IClassFile) obj);
+		}
+	};
+
+	public static final SCPLocalFileType JAVA_COMP_UNIT = new SCPLocalFileType(
+			"JCompUnit", "Java Compilation Unit", 8) {
+
+		public ISCPLocalLocation newLocation(Object obj) {
+			if (!(obj instanceof ICompilationUnit))
+				return null;
+			return new SCPLocalJavaElement(this, (ICompilationUnit) obj);
+		}
+	};
+
+	public static final SCPLocalFileType JAVA_INTERFACE = new SCPLocalFileType(
+			"JInterface", "Java Interface", 9) {
+
+		public ISCPLocalLocation newLocation(Object obj) {
+			if (!(obj instanceof IType))
+				return null;
+			try {
+				if (!((IType) obj).isInterface())
+					return null;
+			} catch (JavaModelException e) {
+
+			}
+			return new SCPLocalJavaElement(this, (IType) obj);
+		}
+	};
+
+	public static final SCPLocalFileType JAVA_CLASS = new SCPLocalFileType(
+			"JClass", "Java Class", 10) {
+
+		public ISCPLocalLocation newLocation(Object obj) {
+			if (!(obj instanceof IType))
+				return null;
+			try {
+				if (((IType) obj).isInterface())
+					return null;
+			} catch (JavaModelException e) {
+
+			}
+			return new SCPLocalJavaElement(this, (IType) obj);
+		}
+	};
+
 	private static final SCPLocalFileType[] TYPES = { UNKNOWN, WORKBENCH_FILE,
-			WORKBENCH_FOLDER };
+			WORKBENCH_FOLDER, WORKBENCH_PROJECT, JAVA_PROJECT,
+			JAVA_PACKAGE_ROOT, JAVA_PACKAGE, JAVA_CLASS_FILE, JAVA_COMP_UNIT,
+			JAVA_INTERFACE, JAVA_CLASS };
 
 	public static SCPLocalFileType[] getTypes() {
 		return TYPES;

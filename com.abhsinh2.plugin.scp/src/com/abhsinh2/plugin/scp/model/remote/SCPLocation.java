@@ -41,6 +41,7 @@ public class SCPLocation implements IAdaptable{
 		this.remoteLocation = remoteLocation;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class adapter) {
 		return null;

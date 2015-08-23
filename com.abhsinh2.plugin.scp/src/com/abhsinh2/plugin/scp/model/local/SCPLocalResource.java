@@ -2,7 +2,6 @@ package com.abhsinh2.plugin.scp.model.local;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
@@ -61,6 +60,7 @@ public class SCPLocalResource implements ISCPLocalLocation {
 		return resource.hashCode();
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class adapter) {
 		return getAdapterDelegate(adapter);
 	}

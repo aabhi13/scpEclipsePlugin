@@ -24,7 +24,7 @@ public class DialogTest {
 		shell.setBounds(100, 100, 200, 100);
 		shell.setLayout(new FillLayout(SWT.VERTICAL));
 
-		LocationDialog dialog = new LocationDialog(shell, null);
+		LocationDialog dialog = new LocationDialog(shell, null, null);
 		if (dialog.open() != InputDialog.OK)
 			return;
 

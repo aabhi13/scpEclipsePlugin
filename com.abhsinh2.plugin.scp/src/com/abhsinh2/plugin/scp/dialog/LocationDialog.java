@@ -1,13 +1,17 @@
 package com.abhsinh2.plugin.scp.dialog;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
+import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.operation.IRunnableContext;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -22,6 +26,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.handlers.HandlerUtil;
+
 import com.abhsinh2.plugin.scp.model.SCPLocationManager;
 import com.abhsinh2.plugin.scp.model.SCPLocationManagerEvent;
 import com.abhsinh2.plugin.scp.model.SCPLocationManagerListener;
@@ -32,6 +39,7 @@ import com.abhsinh2.plugin.scp.util.SCPCopyLocalToRemote;
 public class LocationDialog extends Dialog {
 
 	private Shell parentShell;
+	private ExecutionEvent event;
 	private SCPLocationManager locationManager = SCPLocationManager
 			.getManager();
 
@@ -64,10 +72,11 @@ public class LocationDialog extends Dialog {
 	 * 
 	 * @param parentShell
 	 */
-	public LocationDialog(Shell parentShell, Collection<String> localLocations) {
+	public LocationDialog(Shell parentShell, ExecutionEvent event, Collection<String> localLocations) {
 		super(parentShell);
 
 		this.parentShell = parentShell;
+		this.event = event;
 		this.currentSelectedLocation = localLocations;
 	}
 
@@ -266,9 +275,11 @@ public class LocationDialog extends Dialog {
 	protected void okPressed() {
 		
 		if (useCurrentSelection) {
-			staryCopying(currentSelectedLocation);
+			//staryCopying(currentSelectedLocation);
+			startCopyingInProgressDialog(currentSelectedLocation);
 		} else if (useSavedLocation) {
-			staryCopying(remoteLocation.getLocalFiles());
+			//staryCopying(remoteLocation.getLocalFiles());
+			startCopyingInProgressDialog(remoteLocation.getLocalFiles());
 		}
 		
 		super.okPressed();
@@ -300,6 +311,174 @@ public class LocationDialog extends Dialog {
 			}
 		});
 		
+		return Status.OK_STATUS;
+	}
+	
+	private IStatus startCopyingWithJob(final Collection<String> fileList) {
+		if (fileList == null) {
+			System.out.println("Cancelling");
+			return Status.CANCEL_STATUS;
+		}
+
+		Job job = new Job("Copying Files") {
+			protected IStatus run(final IProgressMonitor monitor) {
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {						
+						try {
+							monitor.beginTask("Preparing", fileList.size());
+							
+							for (String localLocation : fileList) {
+								monitor.subTask("Copying " + localLocation);
+								
+								//SubMonitor subMonitor = SubMonitor.convert(
+								//		monitor, "Copying " + localLocation,
+								//		1);
+								
+								//subMonitor.subTask("Doing something");
+								
+								SCPCopyLocalToRemote copy = new SCPCopyLocalToRemote(
+										localLocation, remoteLocation
+												.getRemoteLocation()
+												.getRemoteAddress(), remoteLocation
+												.getRemoteLocation()
+												.getRemoteLocation(),
+										remoteLocation.getRemoteLocation()
+												.getUsername(), remoteLocation
+												.getRemoteLocation().getPassword());
+
+								copy.copy();
+								
+								monitor.worked(1);
+								
+								if (monitor.isCanceled()) {
+									break;
+									
+									/*
+									Display.getDefault().asyncExec(
+											new Runnable() {
+												@Override
+												public void run() {
+													
+												}
+											});
+									*/
+								}
+							}
+						} finally {
+							monitor.done();
+						}
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+
+		return Status.OK_STATUS;
+	}
+	
+	private void startCopyingInProgressDialog(final Collection<String> fileList) {
+		// Execute the operation
+
+		try {
+			// Display progress either using the ProgressMonitorDialog ...
+
+			// Shell shell = HandlerUtil.getActiveShell(event);
+			// IRunnableContext context = new ProgressMonitorDialog(shell);
+			// ... or using the window's status bar ...
+
+			// IWorkbenchWindow context = HandlerUtil.getActiveWorkbenchWindow(event);
+			// ... or using the workbench progress service
+
+			IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
+			IRunnableContext context = window.getWorkbench().getProgressService();
+			context.run(true, false, new IRunnableWithProgress() {
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+					try {
+						monitor.beginTask("Preparing", fileList.size());
+
+						for (String localLocation : fileList) {
+							monitor.subTask("Copying " + localLocation);
+
+							SCPCopyLocalToRemote copy = new SCPCopyLocalToRemote(
+									localLocation, remoteLocation
+											.getRemoteLocation()
+											.getRemoteAddress(), remoteLocation
+											.getRemoteLocation()
+											.getRemoteLocation(),
+									remoteLocation.getRemoteLocation()
+											.getUsername(), remoteLocation
+											.getRemoteLocation().getPassword());
+
+							copy.copy();
+
+							monitor.worked(1);
+
+							if (monitor.isCanceled()) {
+								break;
+							}
+						}
+						
+						monitor.done();
+					} finally {
+						//monitor.done();
+					}
+
+				}
+			});
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	private IStatus startCopyingWithIProgressService(final Collection<String> fileList) {
+		if (fileList == null) {
+			System.out.println("Cancelling");
+			return Status.CANCEL_STATUS;
+		}
+		
+		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
+		try {
+			window.getWorkbench().getProgressService().run(true, true,
+					   new IRunnableWithProgress() {
+					      public void run(IProgressMonitor monitor)
+					         throws InvocationTargetException, InterruptedException {
+					    	  try {
+									monitor.beginTask("Preparing", fileList.size());
+
+									for (String localLocation : fileList) {
+										monitor.subTask("Copying " + localLocation);
+
+										SCPCopyLocalToRemote copy = new SCPCopyLocalToRemote(
+												localLocation, remoteLocation
+														.getRemoteLocation()
+														.getRemoteAddress(), remoteLocation
+														.getRemoteLocation()
+														.getRemoteLocation(),
+												remoteLocation.getRemoteLocation()
+														.getUsername(), remoteLocation
+														.getRemoteLocation().getPassword());
+
+										copy.copy();
+
+										monitor.worked(1);
+
+										if (monitor.isCanceled()) {
+											break;
+										}
+									}
+									
+									monitor.done();
+								} finally {
+									//monitor.done();
+								}
+					      }
+					});
+		} catch (InvocationTargetException | InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		return Status.OK_STATUS;
 	}
 
