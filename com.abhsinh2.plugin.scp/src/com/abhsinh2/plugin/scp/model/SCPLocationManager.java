@@ -170,7 +170,7 @@ public class SCPLocationManager {
 			return;
 
 		XMLMemento memento = XMLMemento.createWriteRoot(TAG_LOCATIONS);
-		saveFavorites(memento);
+		saveLocations(memento);
 		FileWriter writer = null;
 		try {
 			writer = new FileWriter(getFavoritesFile());
@@ -187,7 +187,7 @@ public class SCPLocationManager {
 		}
 	}
 
-	private void saveFavorites(XMLMemento memento) {
+	private void saveLocations(XMLMemento memento) {
 		for (String key : this.locations.keySet()) {
 			SCPLocation location = this.locations.get(key);
 
