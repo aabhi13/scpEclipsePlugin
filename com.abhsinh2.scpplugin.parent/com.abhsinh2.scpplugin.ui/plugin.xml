@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="com.abhsinh2.scpplugin.ui.command.copy"
+            name="Copy">
+         <defaultHandler
+               class="com.abhsinh2.scpplugin.ui.handlers.CopyHandler">
+         </defaultHandler>
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any">
+         <menu
+               id="com.abhsinh2.scpplugin.ui.menu"
+               label="SCP">
+            <command
+                  commandId="com.abhsinh2.scpplugin.ui.command.copy"
+                  label="Copy"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="com.abhsinh2.scpplugin.ui"
+            name="abhsinh2">
+      </category>
+      <view
+            category="com.abhsinh2.scpplugin.ui"
+            class="com.abhsinh2.scpplugin.ui.view.SCPView"
+            id="com.abhsinh2.scpplugin.ui.SCPView"
+            name="SCP"
+            restorable="true">
+      </view>
+   </extension>
+
+
+</plugin>

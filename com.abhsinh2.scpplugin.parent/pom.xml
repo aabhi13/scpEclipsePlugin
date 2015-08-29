@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/
+  POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" 
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>com.abhsinh2.scpplugin</groupId>
+  <artifactId>com.abhsinh2.scpplugin.parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  
+  <packaging>pom</packaging>
+  
+  <properties>
+    <tycho-version>0.18.0</tycho-version>
+    <eclipse>http://download.eclipse.org/releases/juno</eclipse>
+    <swtbot>http://download.eclipse.org/technology/swtbot/releases/2.3.0/</swtbot>
+  </properties>
+  
+  <modules>
+    <module>com.abhsinh2.scpplugin.ui</module>
+    <module>com.abhsinh2.scpplugin.feature</module>
+    <module>com.abhsinh2.scpplugin.update</module>
+    <module>com.abhsinh2.scpplugin.application</module>
+    <module>com.abhsinh2.scpplugin.product</module>
+    <module>com.abhsinh2.scpplugin.junit</module>
+  </modules>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      
+      <plugin>
+		  <groupId>org.eclipse.tycho</groupId>
+		  <artifactId>target-platform-configuration</artifactId>
+		  <version>${tycho-version}</version>
+		  <configuration>
+		    <environments>
+		      <environment>
+		        <os>win32</os>
+		        <ws>win32</ws>
+		        <arch>x86_64</arch> <!--arch>x86</arch-->
+		      </environment>
+		      <environment>
+		        <os>linux</os>
+		        <ws>gtk</ws>
+		        <arch>x86_64</arch> <!--arch>x86</arch-->
+		      </environment>
+		      <environment>
+		        <os>macosx</os>
+		        <ws>cocoa</ws>
+		        <arch>x86_64</arch> <!--arch>x86</arch-->
+		      </environment>
+		    </environments>
+		  </configuration>
+		</plugin>
+    </plugins>
+  </build>
+  
+  <repositories>
+    <repository>
+      <id>juno</id>
+      <layout>p2</layout>
+      <url>${eclipse}</url>
+    </repository>
+    <repository>
+      <id>swtbot</id>
+      <layout>p2</layout>
+      <url>${swtbot}</url>
+    </repository>
+  </repositories>
+  
+</project>
