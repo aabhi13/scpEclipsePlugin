@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="com.abhsinh2.scpplugin.feature" version="0.0.0">
+      <category name="com.abhsinh2.scpplugin.category"/>
+   </feature>
+   <category-def name="com.abhsinh2.scpplugin.category" label="Category">
+      <description>
+      </description>
+   </category-def>
+</site>

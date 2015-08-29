@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_d0b9gDhtEeWVAMU0meJ78w" elementId="org.eclipse.e4.ide.application" bindingContexts="_d0b9iDhtEeWVAMU0meJ78w">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_d0b9gThtEeWVAMU0meJ78w" label="Hello Abhishek" width="500" height="400">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_d0cklzhtEeWVAMU0meJ78w">
+      <children xsi:type="advanced:Perspective" xmi:id="_d0ckmDhtEeWVAMU0meJ78w">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_d0ckmThtEeWVAMU0meJ78w">
+          <children xsi:type="basic:PartStack" xmi:id="_d0ckmjhtEeWVAMU0meJ78w">
+            <children xsi:type="basic:Part" xmi:id="_YUa1EDhuEeWVAMU0meJ78w" elementId="com.abhsinh2.scpplugin.application.part.0" contributionURI="bundleclass://com.abhsinh2.scpplugin.application/com.abhsinh2.scpplugin.applicationication.parts.Hello" label="Hello">
+              <menus xsi:type="menu:PopupMenu" xmi:id="_-4SyEDq0EeW1AolmDS9VEw" elementId="com.abhsinh2.scpplugin.application.popupmenu.hello" label="Hello">
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_IHSRMDq1EeW1AolmDS9VEw" elementId="com.abhsinh2.scpplugin.application.handledmenuitem.0" label="Hello" command="_aTFQEDqxEeW1AolmDS9VEw"/>
+              </menus>
+              <menus xmi:id="_Nznh4Dq1EeW1AolmDS9VEw" elementId="com.abhsinh2.scpplugin.application.menu.0">
+                <tags>ViewMenu</tags>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_PVm5EDq1EeW1AolmDS9VEw" elementId="com.abhsinh2.scpplugin.application.handledmenuitem.1" label="Hello" command="_aTFQEDqxEeW1AolmDS9VEw"/>
+              </menus>
+            </children>
+            <children xsi:type="basic:Part" xmi:id="_lELF0DqKEeWCdsa6AyOd6g" elementId="com.abhsinh2.scpplugin.application.part.1" contributionURI="bundleclass://com.abhsinh2.scpplugin.application/com.abhsinh2.scpplugin.application.parts.Rainbow" label="Rainbow"/>
+          </children>
+        </children>
+      </children>
+    </children>
+    <mainMenu xmi:id="_d0ckkDhtEeWVAMU0meJ78w" elementId="menu:org.eclipse.ui.main.menu">
+      <children xsi:type="menu:Menu" xmi:id="_d0ckkThtEeWVAMU0meJ78w" label="File">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_d0ckkjhtEeWVAMU0meJ78w" label="Open" iconURI="platform:/plugin/com.abhsinh2.scpplugin.application/icons/sample.gif" command="_d0b9jzhtEeWVAMU0meJ78w"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_d0ckkzhtEeWVAMU0meJ78w" label="Save" iconURI="platform:/plugin/com.abhsinh2.scpplugin.application/icons/save_edit.gif" command="_d0b9kjhtEeWVAMU0meJ78w"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_d0cklDhtEeWVAMU0meJ78w" label="Quit" command="_d0b9izhtEeWVAMU0meJ78w"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_1T1goDqxEeW1AolmDS9VEw" elementId="com.abhsinh2.scpplugin.application.handledmenuitem.hello" label="Hello" tooltip="Says Hello World" command="_aTFQEDqxEeW1AolmDS9VEw">
+          <parameters xmi:id="_QgplUDq0EeW1AolmDS9VEw" elementId="com.abhsinh2.scpplugin.application.parameter.hello.value" name="com.abhsinh2.scpplugin.application.commandparameter.hello.value" value="Hello World Parameter"/>
+        </children>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_d0cklThtEeWVAMU0meJ78w" label="Help">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_d0ckljhtEeWVAMU0meJ78w" label="About" command="_d0b9lThtEeWVAMU0meJ78w"/>
+      </children>
+    </mainMenu>
+    <trimBars xmi:id="_d0cknDhtEeWVAMU0meJ78w">
+      <children xsi:type="menu:ToolBar" xmi:id="_d0cknThtEeWVAMU0meJ78w" elementId="toolbar:org.eclipse.ui.main.toolbar">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_d0cknjhtEeWVAMU0meJ78w" iconURI="platform:/plugin/com.abhsinh2.scpplugin.application/icons/sample.gif" command="_d0b9jzhtEeWVAMU0meJ78w"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_d0cknzhtEeWVAMU0meJ78w" iconURI="platform:/plugin/com.abhsinh2.scpplugin.application/icons/save_edit.gif" command="_d0b9kjhtEeWVAMU0meJ78w"/>
+      </children>
+    </trimBars>
+  </children>
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_HYe5ADqKEeWCdsa6AyOd6g" visible="false" label="Hello Sinha" width="500" height="400">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_HYe5ATqKEeWCdsa6AyOd6g">
+      <children xsi:type="advanced:Perspective" xmi:id="_HYe5AjqKEeWCdsa6AyOd6g">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_HYe5AzqKEeWCdsa6AyOd6g">
+          <children xsi:type="basic:PartStack" xmi:id="_HYe5BDqKEeWCdsa6AyOd6g">
+            <children xsi:type="basic:Part" xmi:id="_HYe5BTqKEeWCdsa6AyOd6g" elementId="com.abhsinh2.scpplugin.application.part.0" contributionURI="bundleclass://com.abhsinh2.scpplugin.application/com.abhsinh2.scpplugin.application.parts.Hello" label="Hello"/>
+          </children>
+        </children>
+      </children>
+    </children>
+    <mainMenu xmi:id="_HYfgEDqKEeWCdsa6AyOd6g" elementId="menu:org.eclipse.ui.main.menu">
+      <children xsi:type="menu:Menu" xmi:id="_HYfgETqKEeWCdsa6AyOd6g" label="File">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_HYfgEjqKEeWCdsa6AyOd6g" label="Open" iconURI="platform:/plugin/com.abhsinh2.scpplugin.application/icons/sample.gif" command="_d0b9jzhtEeWVAMU0meJ78w"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_HYfgEzqKEeWCdsa6AyOd6g" label="Save" iconURI="platform:/plugin/com.abhsinh2.scpplugin.application/icons/save_edit.gif" command="_d0b9kjhtEeWVAMU0meJ78w"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_HYfgFDqKEeWCdsa6AyOd6g" label="Quit" command="_d0b9izhtEeWVAMU0meJ78w"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_HYfgFTqKEeWCdsa6AyOd6g" label="Help">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_HYfgFjqKEeWCdsa6AyOd6g" label="About" command="_d0b9lThtEeWVAMU0meJ78w"/>
+      </children>
+    </mainMenu>
+    <trimBars xmi:id="_HYfgFzqKEeWCdsa6AyOd6g">
+      <children xsi:type="menu:ToolBar" xmi:id="_HYfgGDqKEeWCdsa6AyOd6g" elementId="toolbar:org.eclipse.ui.main.toolbar">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_HYfgGTqKEeWCdsa6AyOd6g" iconURI="platform:/plugin/com.abhsinh2.scpplugin.application/icons/sample.gif" command="_d0b9jzhtEeWVAMU0meJ78w"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_HYfgGjqKEeWCdsa6AyOd6g" iconURI="platform:/plugin/com.abhsinh2.scpplugin.application/icons/save_edit.gif" command="_d0b9kjhtEeWVAMU0meJ78w"/>
+      </children>
+    </trimBars>
+  </children>
+  <handlers xmi:id="_d0b9jDhtEeWVAMU0meJ7bundleclass://com.abhsinh2.scpplugin.application/com.abhsinh2.scpplugin.applicationhsinh2.scpplugin.application.handlers.QuitHandler" command="_d0b9izhtEeWVAMU0meJ78w"/>
+  <handlers xmi:id="_d0b9kDhtEeWVAbundleclass://com.abhsinh2.scpplugin.application/com.abhsinh2.scpplugin.application/com.abhsinh2.scpplugin.application.handlers.OpenHandler" command="_d0b9jzhtEeWVAMU0meJ78w"/>
+  <handlers xmi:id="_d0b9kzbundleclass://com.abhsinh2.scpplugin.application/com.abhsinh2.scpplugin.applicationication/com.abhsinh2.scpplugin.application.handlers.SaveHandler" command="_d0b9kjhtEeWVAMU0meJ78w"/>
+  <handlers xmi:id="bundleclass://com.abhsinh2.scpplugin.application/com.abhsinh2.scpplugin.applicatione4.application/com.abhsinh2.scpplugin.application.handlers.AboutHandler" command="_d0b9lThtEeWVAMU0meJ78w"/>
+  <handlers xmi:id="_pVCzYDqxEeW1AolmDS9VEw" elementId="com.abhsinh2bundleclass://com.abhsinh2.scpplugin.application/com.abhsinh2.scpplugin.applicationcktpub.e4.application/com.abhsinh2.scpplugin.application.handlers.HelloHandler" command="_aTFQEDqxEeW1AolmDS9VEw"/>
+  <bindingTables xmi:id="_d0b9jThtEeWVAMU0meJ78w" bindingContext="_d0b9iDhtEeWVAMU0meJ78w">
+    <bindings xmi:id="_d0b9jjhtEeWVAMU0meJ78w" keySequence="M1+Q" command="_d0b9izhtEeWVAMU0meJ78w"/>
+    <bindings xmi:id="_d0b9kThtEeWVAMU0meJ78w" keySequence="M1+O" command="_d0b9jzhtEeWVAMU0meJ78w"/>
+    <bindings xmi:id="_d0b9lDhtEeWVAMU0meJ78w" keySequence="M1+S" command="_d0b9kjhtEeWVAMU0meJ78w"/>
+    <bindings xmi:id="_d0b9lzhtEeWVAMU0meJ78w" keySequence="M1+A" command="_d0b9lThtEeWVAMU0meJ78w"/>
+  </bindingTables>
+  <rootContext xmi:id="_d0b9iDhtEeWVAMU0meJ78w" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
+    <children xmi:id="_d0b9iThtEeWVAMU0meJ78w" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
+    <children xmi:id="_d0b9ijhtEeWVAMU0meJ78w" elementId="org.eclipse.ui.contexts.dialog" name="In Dialogs"/>
+  </rootContext>
+  <commands xmi:id="_d0b9izhtEeWVAMU0meJ78w" elementId="org.eclipse.ui.file.exit" commandName="quitCommand"/>
+  <commands xmi:id="_d0b9jzhtEeWVAMU0meJ78w" elementId="com.abhsinh2.scpplugin.application.open" commandName="openCommand"/>
+  <commands xmi:id="_d0b9kjhtEeWVAMU0meJ78w" elementId="org.eclipse.ui.file.save" commandName="saveCommand"/>
+  <commands xmi:id="_d0b9lThtEeWVAMU0meJ78w" elementId="org.eclipse.ui.help.aboutAction" commandName="aboutCommand"/>
+  <commands xmi:id="_aTFQEDqxEeW1AolmDS9VEw" elementId="com.abhsinh2.scpplugin.application.command.hello" commandName="helloCommand" description="Says Hello">
+    <parameters xmi:id="_JPqrADq0EeW1AolmDS9VEw" elementId="com.abhsinh2.scpplugin.application.commandparameter.hello.value" name="hello.value"/>
+  </commands>
+  <addons xmi:id="_d0b9gjhtEeWVAMU0meJ78w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_d0b9gzhtEeWVAMU0meJ78w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_d0b9hDhtEeWVAMU0meJ78w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_d0b9hThtEeWVAMU0meJ78w" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_d0b9hjhtEeWVAMU0meJ78w" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_d0b9hzhtEeWVAMU0meJ78w" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+</application:Application>

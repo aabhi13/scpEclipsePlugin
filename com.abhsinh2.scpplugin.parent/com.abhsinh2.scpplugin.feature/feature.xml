@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.abhsinh2.scpplugin.feature"
+      label="Feature"
+      version="1.0.0.qualifier"
+      provider-name="ABHSINH2"
+      plugin="com.abhsinh2.scpplugin.ui">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin id="com.abhsinh2.scpplugin.ui" download-size="0" install-size="0" version="0.0.0" unpack="false" />         
+   <plugin id="com.abhsinh2.scpplugin.application" download-size="0" install-size="0" version="0.0.0" unpack="false" />
+
+</feature>
