@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import com.abhsinh2.scpplugin.ui.model.remote.SCPLocation;
+import com.abhsinh2.scpplugin.ui.model.SCPLocation;
 
 public class SCPLocationTableLabelProvider extends LabelProvider implements
 		ITableLabelProvider {
@@ -14,6 +14,9 @@ public class SCPLocationTableLabelProvider extends LabelProvider implements
 
 	public String getColumnText(Object element, int index) {
 		SCPLocation location = (SCPLocation) element;
+		
+		System.out.println("SCPLocationTableLabelProvider:" + element);
+		
 		switch (index) {
 		case 0:
 			return location.getName();

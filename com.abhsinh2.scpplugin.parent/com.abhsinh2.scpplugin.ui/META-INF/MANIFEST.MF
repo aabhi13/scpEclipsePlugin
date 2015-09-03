@@ -12,3 +12,6 @@ Require-Bundle: org.eclipse.ui,
  com.jcraft.jsch;bundle-version="0.1.46"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.core.expressions,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.texteditor

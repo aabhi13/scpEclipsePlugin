@@ -16,7 +16,7 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 
 import com.abhsinh2.scpplugin.ui.Activator;
-import com.abhsinh2.scpplugin.ui.model.remote.SCPLocation;
+import com.abhsinh2.scpplugin.ui.model.local.ISCPLocalLocation;
 import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
 
 public class SCPLocationManager {
@@ -26,7 +26,7 @@ public class SCPLocationManager {
 	private static final String TAG_NAME = "Name";
 	private static final String TAG_REMOTE_ADDRESS = "RemoteAddress";
 	private static final String TAG_REMOTE_LOCATION = "RemoteLocation";
-	private static final String TAG_LOCAL_LOCATIONS = "LocalLocations";
+	//private static final String TAG_LOCAL_LOCATIONS = "LocalLocations";
 	private static final String TAG_LOCAL_LOCATION = "LocalLocation";
 	private static final String TAG_USERNAME = "Username";
 	private static final String TAG_PASSWORD = "Password";
@@ -83,6 +83,15 @@ public class SCPLocationManager {
 			loadLocations();
 
 		remove(location.getName());
+	}
+
+	public void removeLocations(SCPLocation[] locations) {
+		if (locations == null)
+			return;
+
+		for (SCPLocation location : locations) {
+			removeLocation(location);
+		}
 	}
 
 	public void removeLocation(String name) {
@@ -143,31 +152,41 @@ public class SCPLocationManager {
 	}
 
 	private void loadLocations(XMLMemento memento) {
-		IMemento[] children = memento.getChildren(TAG_LOCATION);
-		for (int i = 0; i < children.length; i++) {
-			SCPLocation item = newFavoriteFor(children[i].getString(TAG_NAME),
-					children[i].getString(TAG_REMOTE_ADDRESS),
-					children[i].getString(TAG_REMOTE_LOCATION),
-					children[i].getString(TAG_USERNAME),
-					children[i].getString(TAG_PASSWORD));
+		IMemento[] locations = memento.getChildren(TAG_LOCATION);
+		for (int i = 0; i < locations.length; i++) {			
+			
+			Collection<String> localFiles = new ArrayList<String>();
+			IMemento[] locationLocations = locations[i].getChildren(TAG_LOCAL_LOCATION);
+			if (locationLocations != null) {
+				for (int j = 0; j < locationLocations.length; j++) {
+					localFiles.add(locationLocations[i].getString(TAG_NAME));
+				}
+			}
+			
+			SCPLocation item = getLocation(locations[i].getString(TAG_NAME),
+					locations[i].getString(TAG_REMOTE_ADDRESS),
+					locations[i].getString(TAG_REMOTE_LOCATION),
+					locations[i].getString(TAG_USERNAME),
+					locations[i].getString(TAG_PASSWORD), 
+					localFiles);
 
 			if (item != null)
 				this.locations.put(item.getName(), item);
 		}
 	}
 
-	public SCPLocation newFavoriteFor(String name, String remoteAddress,
-			String remoteLocation, String username, String password) {
+	public SCPLocation getLocation(String name, String remoteAddress,
+			String remoteLocation, String username, String password, Collection<String> localFiles) {
 		SCPRemoteLocation remote = new SCPRemoteLocation(remoteAddress,
 				remoteLocation, username, password);
-		return new SCPLocation(name, null, remote);
+		return new SCPLocation(name, localFiles, remote);
 	}
 
-	public void saveFavorites() {
-		System.out.println("saveFavorites:" + this.locations);
+	public void saveLocations() {
+		System.out.println("saveLocations:" + this.locations);
 
-		if (this.locations == null || this.locations.isEmpty())
-			return;
+		//if (this.locations == null || this.locations.isEmpty())
+		//	return;
 
 		XMLMemento memento = XMLMemento.createWriteRoot(TAG_LOCATIONS);
 		saveLocations(memento);
@@ -205,17 +224,37 @@ public class SCPLocationManager {
 			locationElement.putString(TAG_PASSWORD,
 					remoteLocation.getPassword());
 
-			IMemento localLocationElement = memento
-					.createChild(TAG_LOCAL_LOCATIONS);
-
 			Collection<String> localLocationList = location.getLocalFiles();
 			if (localLocationList != null && localLocationList.size() > 0) {
 				for (String localLocation : localLocationList) {
-					localLocationElement.putString(TAG_LOCAL_LOCATION,
+					IMemento localLocationElement = locationElement
+							.createChild(TAG_LOCAL_LOCATION);
+					localLocationElement.putString(TAG_NAME,
 							localLocation);
 				}
 			}
 		}
+	}
+
+	public ISCPLocalLocation[] existingLocationFor(Iterator<?> iter) {
+		List<ISCPLocalLocation> result = new ArrayList<ISCPLocalLocation>(10);
+		while (iter.hasNext()) {
+			ISCPLocalLocation item = existingLocationFor(iter.next());
+			if (item != null)
+				result.add(item);
+		}
+		return (ISCPLocalLocation[]) result
+				.toArray(new ISCPLocalLocation[result.size()]);
+	}
+
+	private ISCPLocalLocation existingLocationFor(Object obj) {
+		if (obj == null)
+			return null;
+		
+		if (obj instanceof ISCPLocalLocation)
+			return (ISCPLocalLocation) obj;
+		
+		return null;
 	}
 
 	private File getFavoritesFile() {
