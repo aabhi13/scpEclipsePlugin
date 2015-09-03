@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.abhsinh2.scpplugin.feature_1.0.0.201508020909.jar" id="com.abhsinh2.scpplugin.feature" version="1.0.0.201508020909">
+      <category name="com.abhsinh2.scpplugin.category"/>
+   </feature>
+   <category-def name="com.abhsinh2.scpplugin.category" label="ABHSINH2 SCP Category">
+      <description>
+         SCP Plugin
+      </description>
+   </category-def>
+</site>
