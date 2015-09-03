@@ -20,8 +20,8 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 
+import com.abhsinh2.scpplugin.ui.model.SCPLocation;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
-import com.abhsinh2.scpplugin.ui.model.remote.SCPLocation;
 import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
 
 public class NewLocationDialog extends Dialog {

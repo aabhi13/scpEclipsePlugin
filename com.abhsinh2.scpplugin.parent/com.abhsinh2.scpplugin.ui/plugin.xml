@@ -21,8 +21,29 @@
                label="SCP">
             <command
                   commandId="com.abhsinh2.scpplugin.ui.command.copy"
+                  icon="icons/sample.gif"
                   label="Copy"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <and>
+                           <or>
+                              <instanceof
+                                    value="org.eclipse.core.resources.IResource">
+                              </instanceof>
+                              <instanceof
+                                    value="org.eclipse.jdt.core.IJavaElement">
+                              </instanceof>
+                           </or>
+                        </and>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
          </menu>
       </menuContribution>

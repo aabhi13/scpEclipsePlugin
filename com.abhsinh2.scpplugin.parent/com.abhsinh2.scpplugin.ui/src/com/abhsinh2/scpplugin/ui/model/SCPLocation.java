@@ -1,10 +1,12 @@
-package com.abhsinh2.scpplugin.ui.model.remote;
+package com.abhsinh2.scpplugin.ui.model;
 
 import java.util.Collection;
 
 import org.eclipse.core.runtime.IAdaptable;
 
-public class SCPLocation implements IAdaptable{
+import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
+
+public class SCPLocation implements IAdaptable {
 	private String name;
 	private Collection<String> localFiles;
 	private SCPRemoteLocation remoteLocation;

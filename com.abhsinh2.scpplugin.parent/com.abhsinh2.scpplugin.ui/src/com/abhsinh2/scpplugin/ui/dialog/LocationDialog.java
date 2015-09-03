@@ -29,11 +29,11 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.abhsinh2.scpplugin.ui.model.SCPLocation;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerEvent;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerListener;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerType;
-import com.abhsinh2.scpplugin.ui.model.remote.SCPLocation;
 import com.abhsinh2.scpplugin.ui.util.SCPCopyLocalToRemote;
 
 public class LocationDialog extends Dialog {
@@ -66,6 +66,8 @@ public class LocationDialog extends Dialog {
 	private FormData fd_useCurrentSelectionBtn;
 	private Button useSavedLocationBtn;
 	private FormData fd_btnSaveCurrentSelection;
+	
+	private Button okButton;
 
 	/**
 	 * Create the dialog.
@@ -231,6 +233,8 @@ public class LocationDialog extends Dialog {
 							+ location.getRemoteLocation().getRemoteAddress());
 					remoteLocationLabel.setText(REMOTE_LOCATION_STRING + " "
 							+ location.getRemoteLocation().getRemoteLocation());
+					
+					okButton.setEnabled(true);
 				}
 			}
 		});
@@ -265,8 +269,9 @@ public class LocationDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
+		okButton.setEnabled(false);
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}

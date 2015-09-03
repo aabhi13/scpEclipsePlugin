@@ -21,7 +21,7 @@ import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.abhsinh2.plugin.scp"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.abhsinh2.scpplugin.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
@@ -43,6 +43,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		SCPLocationManager.getManager().loadLocations();
 	}
 
 	/*
@@ -53,7 +54,7 @@ public class Activator extends AbstractUIPlugin {
 	 * )
 	 */
 	public void stop(BundleContext context) throws Exception {
-		SCPLocationManager.getManager().saveFavorites();
+		SCPLocationManager.getManager().saveLocations();
 		saveConfigPrefs();
 		plugin = null;
 		super.stop(context);
