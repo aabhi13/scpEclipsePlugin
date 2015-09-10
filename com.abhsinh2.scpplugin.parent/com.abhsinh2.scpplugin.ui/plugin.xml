@@ -7,7 +7,7 @@
             id="com.abhsinh2.scpplugin.ui.command.copy"
             name="Copy">
          <defaultHandler
-               class="com.abhsinh2.scpplugin.ui.handlers.CopyHandler">
+               class="com.abhsinh2.scpplugin.ui.handlers.OpenLocationWizardHandler">
          </defaultHandler>
       </command>
    </extension>
@@ -61,5 +61,15 @@
             name="SCP"
             restorable="true">
       </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.abhsinh2.scpplugin.ui"
+            name="Location"/>
+      <wizard
+            class="com.abhsinh2.scpplugin.ui.wizard.SelectLocationWizard"
+            id="com.abhsinh2.scpplugin.ui.selectLocationWizard"
+            name="Select Location"/>
    </extension>
 </plugin>
