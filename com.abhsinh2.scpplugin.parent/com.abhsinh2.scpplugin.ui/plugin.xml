@@ -21,7 +21,6 @@
                label="SCP">
             <command
                   commandId="com.abhsinh2.scpplugin.ui.command.copy"
-                  icon="icons/sample.gif"
                   label="Copy"
                   style="push">
                <visibleWhen
