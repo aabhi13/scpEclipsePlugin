@@ -16,6 +16,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.abhsinh2.scpplugin.ui.Activator;
+import com.abhsinh2.scpplugin.ui.SCPLog;
 import com.abhsinh2.scpplugin.ui.model.SCPLocation;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
 import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
@@ -140,9 +141,10 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 				}
 			});
 		} catch (InvocationTargetException e) {
-			System.out.println(e);
+			SCPLog.logError(e);
 			return false;
 		} catch (InterruptedException e) {
+			SCPLog.logError(e);
 			return false;
 		}
 
@@ -151,8 +153,6 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 
 	private void performOperation(final SCPRemoteLocation remoteLocation,
 			final Collection<String> localFiles, IProgressMonitor monitor) {
-		System.out.println("remoteLocation:" + remoteLocation);
-		System.out.println("localFiles:" + localFiles);
 		try {
 			monitor.beginTask("Preparing", localFiles.size());
 
@@ -195,7 +195,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 				}
 			});
 		} catch (Exception e) {
-			System.out.println(e);
+			SCPLog.logError(e);
 		}
 	}
 

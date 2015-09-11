@@ -183,8 +183,6 @@ public class SCPLocationManager {
 	}
 
 	public void saveLocations() {
-		System.out.println("saveLocations:" + this.locations);
-
 		//if (this.locations == null || this.locations.isEmpty())
 		//	return;
 

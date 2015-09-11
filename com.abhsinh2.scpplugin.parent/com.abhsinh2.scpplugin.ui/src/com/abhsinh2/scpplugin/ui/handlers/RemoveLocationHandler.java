@@ -19,7 +19,6 @@ import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
 public class RemoveLocationHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		System.out.println("RemoveLocationHandler.execute");
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
 		if (selection instanceof IStructuredSelection) {

@@ -29,6 +29,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.abhsinh2.scpplugin.ui.SCPLog;
 import com.abhsinh2.scpplugin.ui.model.SCPLocation;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerEvent;
@@ -292,7 +293,6 @@ public class LocationDialog extends Dialog {
 
 	private IStatus staryCopying(final Collection<String> fileList) {
 		if (fileList == null) {
-			System.out.println("Cancelling");
 			return Status.CANCEL_STATUS;
 		}
 
@@ -321,7 +321,6 @@ public class LocationDialog extends Dialog {
 	
 	private IStatus startCopyingWithJob(final Collection<String> fileList) {
 		if (fileList == null) {
-			System.out.println("Cancelling");
 			return Status.CANCEL_STATUS;
 		}
 
@@ -433,13 +432,12 @@ public class LocationDialog extends Dialog {
 				}
 			});
 		} catch (Exception e) {
-			System.out.println(e);
+			SCPLog.logError(e);
 		}
 	}
 	
 	private IStatus startCopyingWithIProgressService(final Collection<String> fileList) {
 		if (fileList == null) {
-			System.out.println("Cancelling");
 			return Status.CANCEL_STATUS;
 		}
 		

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.abhsinh2.scpplugin.ui.SCPLog;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -28,9 +29,7 @@ public class SCPCopyLocalToRemote {
 		this.password = password;
 	}
 
-	public void copy() {
-		System.out.println(this.toString());
-		
+	public void copy() {		
 		FileInputStream fis = null;
 		try {
 			JSch jsch = new JSch();
@@ -42,10 +41,7 @@ public class SCPCopyLocalToRemote {
 			
 			File knowHostsFile = new File(userHomeDir + java.io.File.separator + SSH_DIR + java.io.File.separator + KNOWN_HOSTS);
 			File idRSAFile = new File(userHomeDir + java.io.File.separator + SSH_DIR + java.io.File.separator + ID_RSA);			
-			
-			System.out.println("knowHostsFile:" + knowHostsFile.getPath());
-			System.out.println("idRSAFile:" + idRSAFile.getPath());
-			
+						
 			jsch.setKnownHosts(knowHostsFile.getPath());			
 			jsch.addIdentity(idRSAFile.getPath());
 			
@@ -76,7 +72,6 @@ public class SCPCopyLocalToRemote {
 			channel.connect();
 
 			if (checkAck(in) != 0) {
-				System.out.println("Exiting 1");
 				System.exit(0);
 			}
 
@@ -90,7 +85,6 @@ public class SCPCopyLocalToRemote {
 				out.write(command.getBytes());
 				out.flush();
 				if (checkAck(in) != 0) {
-					System.out.println("Exiting 2");
 					System.exit(0);
 				}
 			}
@@ -109,7 +103,6 @@ public class SCPCopyLocalToRemote {
 			out.write(command.getBytes());
 			out.flush();
 			if (checkAck(in) != 0) {
-				System.out.println("Exiting 3");
 				System.exit(0);
 			}
 
@@ -129,18 +122,14 @@ public class SCPCopyLocalToRemote {
 			out.write(buf, 0, 1);
 			out.flush();
 			if (checkAck(in) != 0) {
-				System.out.println("Exiting 4");
 				System.exit(0);
 			}
 			out.close();
 
 			channel.disconnect();
 			session.disconnect();
-
-			//System.exit(0);
 		} catch (Exception e) {
-			System.out.println(e);
-			e.printStackTrace();
+			SCPLog.logError(e);
 			try {
 				if (fis != null)
 					fis.close();

@@ -46,7 +46,7 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 	protected EnterNewLocationWizardPage(String pageName) {
 		super(pageName);
 	}
-
+	
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -267,8 +267,6 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 			usernameTextBox.removeVerifyListener(this);
 			usernameTextBox.removeModifyListener(this);
 
-			System.out.println("username changes:" + usernameTextBox.getText());
-
 			if (!isEmpty(usernameTextBox)) {
 				canFlipToNextPage = true;
 			}
@@ -278,9 +276,6 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 		} else if (source == remoteLocationTextBox) {
 			remoteLocationTextBox.removeVerifyListener(this);
 			remoteLocationTextBox.removeModifyListener(this);
-
-			System.out.println("location changes:"
-					+ remoteLocationTextBox.getText());
 
 			if (!isEmpty(remoteLocationTextBox)) {
 				canFlipToNextPage = true;

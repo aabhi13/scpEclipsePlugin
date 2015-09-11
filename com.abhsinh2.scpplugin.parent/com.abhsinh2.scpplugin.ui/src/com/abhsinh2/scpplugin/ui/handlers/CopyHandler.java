@@ -23,7 +23,6 @@ public class CopyHandler extends AbstractHandler {
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		System.out.println("Hello SCP");
 		
 		this.shell = HandlerUtil.getActiveShell(event);
 		this.event = event;

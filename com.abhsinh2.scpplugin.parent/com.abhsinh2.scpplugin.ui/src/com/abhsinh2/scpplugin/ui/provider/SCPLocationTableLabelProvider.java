@@ -14,9 +14,7 @@ public class SCPLocationTableLabelProvider extends LabelProvider implements
 
 	public String getColumnText(Object element, int index) {
 		SCPLocation location = (SCPLocation) element;
-		
-		System.out.println("SCPLocationTableLabelProvider:" + element);
-		
+				
 		switch (index) {
 		case 0:
 			return location.getName();
