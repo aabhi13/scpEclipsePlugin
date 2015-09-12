@@ -2,6 +2,7 @@ package com.abhsinh2.scpplugin.ui.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,12 +22,13 @@ import com.abhsinh2.scpplugin.ui.model.SCPLocation;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
 import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
 import com.abhsinh2.scpplugin.ui.util.SCPCopyLocalToRemote;
+import com.abhsinh2.scpplugin.ui.util.Utility;
 
 public class SelectLocationWizard extends Wizard implements INewWizard {
 
 	private IStructuredSelection initialSelection;
 	private SelectLocationWizardPage selectLocationWizardPage;
-	private EnterNewLocationWizardPage enterNewLocationWizardPage;
+	private CreateLocationWizardPage createLocationWizardPage;
 	private SelectLocalFilesWizardPage selectLocalFilesWizardPage;
 	private ExecutionEvent executionEvent;
 
@@ -55,18 +57,25 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 
 	public void addPages() {
 		setWindowTitle("SCP");
-
-		if (locationManager.getAllLocations().isEmpty()) {
-			enterNewLocationWizardPage = new EnterNewLocationWizardPage();
-			addPage(enterNewLocationWizardPage);
+		
+		List<SCPLocation> locations = Utility.getSCPLocations(this.initialSelection);
+		if (locations != null && locations.size() > 0) {
+			// Edit command from View
+			createLocationWizardPage = new CreateLocationWizardPage(locations.get(0));
+			addPage(createLocationWizardPage);			
 		} else {
-			selectLocationWizardPage = new SelectLocationWizardPage(
-					this.initialSelection);
-			addPage(selectLocationWizardPage);
+			if (locationManager.getAllLocations().isEmpty()) {
+				createLocationWizardPage = new CreateLocationWizardPage();
+				addPage(createLocationWizardPage);
+			} else {
+				selectLocationWizardPage = new SelectLocationWizardPage(
+						this.initialSelection);
+				addPage(selectLocationWizardPage);
 
-			enterNewLocationWizardPage = new EnterNewLocationWizardPage();
-			addPage(enterNewLocationWizardPage);
-		}
+				createLocationWizardPage = new CreateLocationWizardPage();
+				addPage(createLocationWizardPage);
+			}
+		}		
 
 		selectLocalFilesWizardPage = new SelectLocalFilesWizardPage(
 				this.initialSelection);
@@ -95,16 +104,16 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 		Collection<String> localFiles = null;
 
 		if (selectLocationWizardPage == null) {
-			remoteLocation = enterNewLocationWizardPage.getSCPRemoteLocation();
+			remoteLocation = createLocationWizardPage.getSCPRemoteLocation();
 			localFiles = selectLocalFilesWizardPage.getLocalFilesPath();
 
 			SCPLocation location = new SCPLocation(
-					enterNewLocationWizardPage.getLocationName(), localFiles,
+					createLocationWizardPage.getLocationName(), localFiles,
 					remoteLocation);
 			locationManager.addLocation(location);
 		} else {
 			if (selectLocationWizardPage.isAddNewLocation()) {
-				remoteLocation = enterNewLocationWizardPage
+				remoteLocation = createLocationWizardPage
 						.getSCPRemoteLocation();
 
 				if (selectLocationWizardPage.isUseSavedLocalFiles()) {

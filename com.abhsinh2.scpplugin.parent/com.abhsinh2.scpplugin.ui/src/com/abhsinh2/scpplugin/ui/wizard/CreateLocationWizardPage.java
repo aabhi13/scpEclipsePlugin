@@ -3,6 +3,8 @@ package com.abhsinh2.scpplugin.ui.wizard;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -21,11 +23,11 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 
+import com.abhsinh2.scpplugin.ui.model.SCPLocation;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
 import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
-import org.eclipse.wb.swt.SWTResourceManager;
 
-public class EnterNewLocationWizardPage extends WizardPage implements Listener,
+public class CreateLocationWizardPage extends WizardPage implements Listener,
 		VerifyListener, FocusListener, ModifyListener {
 	private Text nameTextBox;
 	private Text remoteMachineTextBox;
@@ -33,27 +35,33 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 	private Text usernameTextBox;
 	private Text passwordTextBox;
 	private Button savePasswordButton;
-	private Label errorMessageLabel;
 	private boolean canFlipToNextPage = false;
 
-	SCPLocationManager manager = SCPLocationManager.getManager();
+	private SCPLocationManager manager = SCPLocationManager.getManager();
+	private SCPLocation location;
+	private Status status;
 
 	private static final String IPADDRESS_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 
-	protected EnterNewLocationWizardPage(String pageName) {
+	protected CreateLocationWizardPage(String pageName) {
 		super(pageName);
+
+		status = new Status(IStatus.OK, "not_used", 0, "", null);
 	}
-	
+
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public EnterNewLocationWizardPage() {
-		this("Enter New Location");
-		setTitle("Enter New Location");
-		setDescription("Enter New Location");
+	public CreateLocationWizardPage() {
+		this("Create Location");
+	}
+
+	public CreateLocationWizardPage(SCPLocation location) {
+		this("Edit Location");
+		this.location = location;
 	}
 
 	@Override
@@ -70,8 +78,12 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 		nameLabel.setText("Name*:");
 
 		nameTextBox = new Text(container, SWT.BORDER);
+		if (this.location != null) {
+			nameTextBox.setText(this.location.getName());
+		}
 		nameTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
+		nameTextBox.setFocus();
 		nameTextBox.addFocusListener(this);
 
 		final Label label_1 = new Label(container, SWT.NONE);
@@ -85,6 +97,10 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 		remoteMachineLabel.setText("Remote Machine*:");
 
 		remoteMachineTextBox = new Text(container, SWT.BORDER);
+		if (this.location != null) {
+			remoteMachineTextBox.setText(this.location.getRemoteLocation()
+					.getRemoteAddress());
+		}
 		remoteMachineTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
 		remoteMachineTextBox.addFocusListener(this);
@@ -100,6 +116,10 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 		remoteLocationLabel.setText("Remote Location*:");
 
 		remoteLocationTextBox = new Text(container, SWT.BORDER);
+		if (this.location != null) {
+			remoteLocationTextBox.setText(this.location.getRemoteLocation()
+					.getRemoteLocation());
+		}
 		remoteLocationTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
 		remoteLocationTextBox.addModifyListener(this);
@@ -116,6 +136,10 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 		usernameLabel.setText("Username*:");
 
 		usernameTextBox = new Text(container, SWT.BORDER);
+		if (this.location != null) {
+			usernameTextBox.setText(this.location.getRemoteLocation()
+					.getUsername());
+		}
 		usernameTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
 		usernameTextBox.addModifyListener(this);
@@ -132,6 +156,10 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 		passwordLabel.setText("Password:");
 
 		passwordTextBox = new Text(container, SWT.BORDER | SWT.PASSWORD);
+		if (this.location != null) {
+			passwordTextBox.setText(this.location.getRemoteLocation()
+					.getPassword());
+		}
 		passwordTextBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
 		passwordTextBox.setEnabled(false);
@@ -140,19 +168,6 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 		savePasswordButton = new Button(container, SWT.CHECK);
 		savePasswordButton.setText("Save Password");
 		savePasswordButton.addListener(SWT.Selection, this);
-
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-
-		errorMessageLabel = new Label(container, SWT.NONE);
-		errorMessageLabel.setForeground(SWTResourceManager
-				.getColor(SWT.COLOR_RED));
-		GridData gridData_5 = new GridData(SWT.LEFT, SWT.CENTER, false, false,
-				1, 1);
-		gridData_5.widthHint = 474;
-		errorMessageLabel.setLayoutData(gridData_5);
-		errorMessageLabel.setText("Please fill the required fields");
 	}
 
 	public String getLocationName() {
@@ -196,19 +211,19 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 	}
 
 	@Override
-	public boolean canFlipToNextPage() {
-		if (this.usernameTextBox != null
-				&& (this.usernameTextBox.getText() == null || this.usernameTextBox
-						.getText().trim().isEmpty())) {
+	public boolean canFlipToNextPage() {		
+		if (getErrorMessage() != null) 
+			return false;
+		
+		if (this.isTextEmpty(usernameTextBox)) {
 			return false;
 		}
 
-		if (this.remoteLocationTextBox != null
-				&& (this.remoteLocationTextBox.getText() == null || this.remoteLocationTextBox
-						.getText().trim().isEmpty())) {
+		if (this.isTextEmpty(remoteLocationTextBox)) {
 			return false;
 		}
-		return canFlipToNextPage;
+		
+		return true;
 	}
 
 	@Override
@@ -229,11 +244,15 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 			String givenName = nameTextBox.getText();
 			if (manager.getLocation(givenName) != null) {
 				canFlipToNextPage = false;
-				errorMessageLabel
-						.setText("Name already exists. Go to SCP View and delete the name");
+				status = new Status(
+						IStatus.ERROR,
+						"not_used",
+						0,
+						"Name already exists. Go to SCP View and delete the name",
+						null);
 			} else {
 				canFlipToNextPage = true;
-				errorMessageLabel.setText("");
+				status = new Status(IStatus.OK, "not_used", 0, "", null);
 			}
 		} else if (source == remoteMachineTextBox) {
 			String givenName = remoteMachineTextBox.getText();
@@ -241,21 +260,23 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 			Matcher matcher = pattern.matcher(givenName);
 			if (matcher.matches()) {
 				canFlipToNextPage = true;
-				errorMessageLabel.setText("");
+				status = new Status(IStatus.OK, "not_used", 0, "", null);
 			} else {
 				canFlipToNextPage = false;
-				errorMessageLabel.setText("Incorrect IP Address.");
+				status = new Status(IStatus.ERROR, "not_used", 0,
+						"Incorrect IP Address.", null);
 			}
 		} else if (source == remoteLocationTextBox) {
-			if (!isEmpty(remoteLocationTextBox)) {
+			if (!isTextEmpty(remoteLocationTextBox)) {
 				canFlipToNextPage = true;
 			}
 		} else if (source == usernameTextBox) {
-			if (!isEmpty(usernameTextBox)) {
+			if (!isTextEmpty(usernameTextBox)) {
 				canFlipToNextPage = true;
 			}
 		}
 
+		applyStatusLine();
 		getWizard().getContainer().updateButtons();
 	}
 
@@ -267,7 +288,7 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 			usernameTextBox.removeVerifyListener(this);
 			usernameTextBox.removeModifyListener(this);
 
-			if (!isEmpty(usernameTextBox)) {
+			if (!isTextEmpty(usernameTextBox)) {
 				canFlipToNextPage = true;
 			}
 
@@ -277,7 +298,7 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 			remoteLocationTextBox.removeVerifyListener(this);
 			remoteLocationTextBox.removeModifyListener(this);
 
-			if (!isEmpty(remoteLocationTextBox)) {
+			if (!isTextEmpty(remoteLocationTextBox)) {
 				canFlipToNextPage = true;
 			}
 
@@ -285,15 +306,27 @@ public class EnterNewLocationWizardPage extends WizardPage implements Listener,
 			remoteLocationTextBox.addModifyListener(this);
 		}
 
+		applyStatusLine();
 		getWizard().getContainer().updateButtons();
+
+		// MessageDialog.openInformation(this.getShell(),"", "Flight price "+
+		// price);
+		// MessageDialog.openInformation(workbench.getActiveWorkbenchWindow().getShell(),
+		// "Holiday info", summary);
 	}
 
-	private boolean isEmpty(Text text) {
-		if (text.getText() == null || text.getText().trim().isEmpty()) {
+	private boolean isTextEmpty(Text text) {
+		if (text == null || text.getText() == null || text.getText().trim().isEmpty()) {
 			return true;
 		}
-
 		return false;
+	}
+
+	private void applyStatusLine() {
+		if (!status.isOK())
+			setErrorMessage(status.getMessage());
+		else
+			setErrorMessage(null);
 	}
 
 }

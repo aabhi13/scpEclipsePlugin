@@ -3,7 +3,6 @@ package com.abhsinh2.scpplugin.ui.view;
 import java.util.Comparator;
 
 import org.eclipse.core.commands.IHandler;
-import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -35,7 +34,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.IHandlerActivation;
@@ -44,8 +42,12 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.IWorkbenchActionDefinitionIds;
 
 import com.abhsinh2.scpplugin.ui.actions.SCPViewFilterAction;
+import com.abhsinh2.scpplugin.ui.contributors.EditLocationContributionItem;
 import com.abhsinh2.scpplugin.ui.contributors.RemoveLocationContributionItem;
+import com.abhsinh2.scpplugin.ui.contributors.ViewLocationContributionItem;
+import com.abhsinh2.scpplugin.ui.handlers.EditLocationHandler;
 import com.abhsinh2.scpplugin.ui.handlers.RemoveLocationHandler;
+import com.abhsinh2.scpplugin.ui.handlers.ViewLocationHandler;
 import com.abhsinh2.scpplugin.ui.model.SCPLocation;
 import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
 import com.abhsinh2.scpplugin.ui.model.local.ISCPLocalLocation;
@@ -67,7 +69,13 @@ public class SCPView extends ViewPart {
 	private SCPViewFilterAction filterAction;
 
 	private IHandler removeHandler;
+	private IHandler editHandler;
+	private IHandler viewHandler;
+	
 	private RemoveLocationContributionItem removeContributionItem;
+	private EditLocationContributionItem editContributionItem;
+	private ViewLocationContributionItem viewContributionItem;
+	
 	private ISelectionListener pageSelectionListener;
 
 	public SCPView() {
@@ -79,7 +87,7 @@ public class SCPView extends ViewPart {
 		createContributions();
 		createContextMenu();
 		createToolbarButtons();
-		createViewPulldownMenu();
+		//createViewPulldownMenu();
 		hookGlobalHandlers();
 		createInlineEditor();
 		hookMouse();
@@ -134,8 +142,15 @@ public class SCPView extends ViewPart {
 
 	private void createContributions() {
 		removeHandler = new RemoveLocationHandler();
+		editHandler = new EditLocationHandler();
+		viewHandler = new ViewLocationHandler();
+		
 		removeContributionItem = new RemoveLocationContributionItem(
 				getViewSite(), removeHandler);
+		editContributionItem = new EditLocationContributionItem(
+				getViewSite(), editHandler);
+		viewContributionItem = new ViewLocationContributionItem(
+				getViewSite(), viewHandler);
 	}
 
 	private void createContextMenu() {
@@ -152,15 +167,17 @@ public class SCPView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager menuMgr) {
+		//menuMgr.add(new Separator(""));
+		menuMgr.add(viewContributionItem);
 		menuMgr.add(new Separator("edit"));
-		menuMgr.add(removeContributionItem);
-		menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		menuMgr.add(editContributionItem);
+		//menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void createToolbarButtons() {
 		IToolBarManager toolBarMgr = getViewSite().getActionBars()
 				.getToolBarManager();
-		toolBarMgr.add(new GroupMarker("edit"));
+		//toolBarMgr.add(new GroupMarker("edit"));
 		toolBarMgr.add(removeContributionItem);
 	}
 
