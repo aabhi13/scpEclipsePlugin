@@ -4,16 +4,16 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
+import com.abhsinh2.scpplugin.ui.model.Location;
 
-public class SCPLocationTableLabelProvider extends LabelProvider implements
+public class LocationViewTableLabelProvider extends LabelProvider implements
 		ITableLabelProvider {
 	public Image getColumnImage(Object element, int index) {
 		return null;
 	}
 
 	public String getColumnText(Object element, int index) {
-		SCPLocation location = (SCPLocation) element;
+		Location location = (Location) element;
 				
 		switch (index) {
 		case 0:

@@ -20,9 +20,9 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
-import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
+import com.abhsinh2.scpplugin.ui.model.Location;
+import com.abhsinh2.scpplugin.ui.model.LocationManager;
+import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 
 public class NewLocationDialog extends Dialog {
 	private Text nameTextBox;
@@ -31,7 +31,7 @@ public class NewLocationDialog extends Dialog {
 	private Text usernameTextBox;
 	private Text passwordTextBox;
 
-	SCPLocationManager manager = SCPLocationManager.getManager();
+	LocationManager manager = LocationManager.getManager();
 	Collection<String> currentSelectedLocation;
 	
 	private LocationDialog prevLocationDialog;
@@ -165,21 +165,21 @@ public class NewLocationDialog extends Dialog {
 		String username = usernameTextBox.getText();
 		String password = passwordTextBox.getText();
 		
-		SCPLocation location = manager.getLocation(name);
+		Location location = manager.getLocation(name);
 		if (location != null) {
 			YesNoPrompt prompt=new YesNoPrompt("Name already exists. Do you want to overwrite?");
 		    Display.getDefault().syncExec(prompt);
 		    
 			if (prompt.getResult() == SWT.YES) {
-				SCPRemoteLocation newRemoteLocation = new SCPRemoteLocation(remoteAdd,
+				RemoteLocation newRemoteLocation = new RemoteLocation(remoteAdd,
 						remoteLoc, username, password);
-				location = new SCPLocation(name,
+				location = new Location(name,
 						this.currentSelectedLocation, newRemoteLocation);
 			}
 		} else {
-			SCPRemoteLocation newRemoteLocation = new SCPRemoteLocation(remoteAdd,
+			RemoteLocation newRemoteLocation = new RemoteLocation(remoteAdd,
 					remoteLoc, username, password);
-			location = new SCPLocation(name,
+			location = new Location(name,
 					this.currentSelectedLocation, newRemoteLocation);
 		}
 		

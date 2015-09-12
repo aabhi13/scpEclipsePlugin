@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.abhsinh2.scpplugin.ui.dialog.LocationDialog;
-import com.abhsinh2.scpplugin.ui.model.local.ISCPLocalLocation;
-import com.abhsinh2.scpplugin.ui.model.local.SCPLocalFileType;
+import com.abhsinh2.scpplugin.ui.model.local.ILocalLocation;
+import com.abhsinh2.scpplugin.ui.model.local.LocalFileType;
 
 public class CopyHandler extends AbstractHandler {
 	
@@ -36,7 +36,7 @@ public class CopyHandler extends AbstractHandler {
 					.toArray();
 
 			for (int i = 0; i < selectedObjs.length; i++) {
-				ISCPLocalLocation item = existingLocation(selectedObjs[i]);
+				ILocalLocation item = existingLocation(selectedObjs[i]);
 				if (item == null) {
 					item = newLocation(selectedObjs[i]);
 				}
@@ -50,20 +50,20 @@ public class CopyHandler extends AbstractHandler {
 		return null;
 	}
 
-	private ISCPLocalLocation existingLocation(Object obj) {
+	private ILocalLocation existingLocation(Object obj) {
 		if (obj == null)
 			return null;
 
-		if (obj instanceof ISCPLocalLocation)
-			return (ISCPLocalLocation) obj;
+		if (obj instanceof ILocalLocation)
+			return (ILocalLocation) obj;
 
 		return null;
 	}
 
-	private ISCPLocalLocation newLocation(Object obj) {
-		SCPLocalFileType[] types = SCPLocalFileType.getTypes();
+	private ILocalLocation newLocation(Object obj) {
+		LocalFileType[] types = LocalFileType.getTypes();
 		for (int i = 0; i < types.length; i++) {
-			ISCPLocalLocation item = types[i].newLocation(obj);
+			ILocalLocation item = types[i].newLocation(obj);
 			if (item != null)
 				return item;
 		}

@@ -2,14 +2,14 @@ package com.abhsinh2.scpplugin.ui.model.local;
 
 import org.eclipse.core.runtime.IAdaptable;
 
-public interface ISCPLocalLocation extends IAdaptable {
+public interface ILocalLocation extends IAdaptable {
 	public String getName();
 
 	public void setName(String newName);
 
 	public String getLocation();
 
-	public SCPLocalFileType getType();
+	public LocalFileType getType();
 
-	public static ISCPLocalLocation[] NONE = new ISCPLocalLocation[] {};
+	public static ILocalLocation[] NONE = new ILocalLocation[] {};
 }

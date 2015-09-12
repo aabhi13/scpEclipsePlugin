@@ -6,7 +6,7 @@ import org.eclipse.core.runtime.Status;
 /**
  * The logger of convenience for the Favorites plug-in.
  */
-public class SCPLog {
+public class Logger {
 
 	public static void logInfo(String message) {
 		log(IStatus.INFO, IStatus.OK, message, null);

@@ -2,14 +2,21 @@ package com.abhsinh2.scpplugin.ui.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.ide.IDE;
 
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
-import com.abhsinh2.scpplugin.ui.model.local.ISCPLocalLocation;
-import com.abhsinh2.scpplugin.ui.model.local.SCPLocalFileType;
-import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
+import com.abhsinh2.scpplugin.ui.model.Location;
+import com.abhsinh2.scpplugin.ui.model.local.ILocalLocation;
+import com.abhsinh2.scpplugin.ui.model.local.LocalFileType;
+import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 
 public class Utility {
 
@@ -26,15 +33,15 @@ public class Utility {
 			Object item = getLocation(selectedObjs[i]);
 
 			if (item != null) {
-				if (item instanceof ISCPLocalLocation) {
-					ISCPLocalLocation localLocation = (ISCPLocalLocation) item;
+				if (item instanceof ILocalLocation) {
+					ILocalLocation localLocation = (ILocalLocation) item;
 					selectedLocalFilesList.add(localLocation.getLocation());
-				} else if (item instanceof SCPLocation) {
-					SCPLocation location = (SCPLocation) item;
+				} else if (item instanceof Location) {
+					Location location = (Location) item;
 					selectedLocalFilesList.addAll(location.getLocalFiles());
 				}
 			} else {
-				ISCPLocalLocation localLocation = newLocalFileLocation(selectedObjs[i]);
+				ILocalLocation localLocation = newLocalFileLocation(selectedObjs[i]);
 				selectedLocalFilesList.add(localLocation.getLocation());
 			}
 		}
@@ -46,29 +53,29 @@ public class Utility {
 		if (obj == null)
 			return null;
 
-		if (obj instanceof ISCPLocalLocation)
-			return (ISCPLocalLocation) obj;
+		if (obj instanceof ILocalLocation)
+			return (ILocalLocation) obj;
 
-		if (obj instanceof SCPLocation)
-			return (SCPLocation) obj;
+		if (obj instanceof Location)
+			return (Location) obj;
 
-		if (obj instanceof SCPRemoteLocation)
-			return (SCPRemoteLocation) obj;
+		if (obj instanceof RemoteLocation)
+			return (RemoteLocation) obj;
 
 		return null;
 	}
 
-	private static ISCPLocalLocation newLocalFileLocation(Object obj) {
-		SCPLocalFileType[] types = SCPLocalFileType.getTypes();
+	private static ILocalLocation newLocalFileLocation(Object obj) {
+		LocalFileType[] types = LocalFileType.getTypes();
 		for (int i = 0; i < types.length; i++) {
-			ISCPLocalLocation item = types[i].newLocation(obj);
+			ILocalLocation item = types[i].newLocation(obj);
 			if (item != null)
 				return item;
 		}
 		return null;
 	}
 
-	public static List<SCPLocation> getSCPLocations(IStructuredSelection selection) {
+	public static List<Location> getSCPLocations(IStructuredSelection selection) {
 		if (selection == null) {
 			return null;
 		}
@@ -76,12 +83,12 @@ public class Utility {
 		Object[] selectedObjs = selection.toArray();
 		
 		if (selectedObjs.length > 0) {
-			List<SCPLocation> locations = new ArrayList<SCPLocation>();
+			List<Location> locations = new ArrayList<Location>();
 
 			for (int i = 0; i < selectedObjs.length; i++) {
 				Object obj = selectedObjs[i];
-				if (obj != null && obj instanceof SCPLocation) {
-					locations.add((SCPLocation) obj);
+				if (obj != null && obj instanceof Location) {
+					locations.add((Location) obj);
 				}
 			}
 
@@ -90,4 +97,41 @@ public class Utility {
 		
 		return null;
 	}
+	
+
+	/**
+	 * Open an editor on the first selected element
+	 * 
+	 * @param page
+	 *            the page in which the editor should be opened
+	 * @param selection
+	 *            the selection containing the object to be edited
+	 */
+	public static void openEditor(IWorkbenchPage page, ISelection selection) {
+
+		// Get the first element.
+
+		if (!(selection instanceof IStructuredSelection))
+			return;
+		Iterator<?> iter = ((IStructuredSelection) selection).iterator();
+		if (!iter.hasNext())
+			return;
+		Object elem = iter.next();
+		// Adapt the first element to a file.
+
+		if (!(elem instanceof IAdaptable))
+			return;
+
+		IFile file = (IFile) ((IAdaptable) elem).getAdapter(IFile.class);
+		if (file == null)
+			return;
+
+		// Open an editor on that file.
+
+		try {
+			IDE.openEditor(page, file);
+		} catch (PartInitException e) {
+		}
+	}
+
 }

@@ -4,15 +4,15 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerEvent;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerListener;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerType;
+import com.abhsinh2.scpplugin.ui.model.LocationManager;
+import com.abhsinh2.scpplugin.ui.model.LocationManagerEvent;
+import com.abhsinh2.scpplugin.ui.model.LocationManagerListener;
+import com.abhsinh2.scpplugin.ui.model.LocationManagerOperationType;
 
-public class SCPViewContentProvider implements IStructuredContentProvider,
-		SCPLocationManagerListener {
+public class LocationViewTableContentProvider implements IStructuredContentProvider,
+		LocationManagerListener {
 	private TableViewer viewer;
-	private SCPLocationManager manager;
+	private LocationManager manager;
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		this.viewer = (TableViewer) viewer;
@@ -20,7 +20,7 @@ public class SCPViewContentProvider implements IStructuredContentProvider,
 		if (manager != null)
 			manager.removeLocationManagerListener(this);
 
-		manager = (SCPLocationManager) newInput;
+		manager = (LocationManager) newInput;
 
 		if (manager != null)
 			manager.addLocationManagerListener(this);
@@ -33,15 +33,15 @@ public class SCPViewContentProvider implements IStructuredContentProvider,
 		return manager.getLocations().toArray();
 	}
 
-	public void locationChanged(SCPLocationManagerEvent event) {
+	public void locationChanged(LocationManagerEvent event) {
 		viewer.getTable().setRedraw(false);
 		try {
-			if (event.getEventType() == SCPLocationManagerType.ADDED
-					|| event.getEventType() == SCPLocationManagerType.UPDATED) {
+			if (event.getEventType() == LocationManagerOperationType.ADDED
+					|| event.getEventType() == LocationManagerOperationType.UPDATED) {
 				viewer.add(event.getLocation());
 			}
 
-			if (event.getEventType() == SCPLocationManagerType.DELETED) {
+			if (event.getEventType() == LocationManagerOperationType.DELETED) {
 				viewer.remove(event.getLocation());
 			}
 

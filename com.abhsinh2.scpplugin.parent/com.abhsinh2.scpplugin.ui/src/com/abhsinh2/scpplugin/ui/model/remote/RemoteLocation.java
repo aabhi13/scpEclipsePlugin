@@ -2,19 +2,19 @@ package com.abhsinh2.scpplugin.ui.model.remote;
 
 import org.eclipse.core.runtime.IAdaptable;
 
-public class SCPRemoteLocation implements IAdaptable {
+public class RemoteLocation implements IAdaptable {
 	private String remoteAddress;
 	private String remoteLocation;
 	private String username;
 	private String password;
 
-	public SCPRemoteLocation(String remoteAddress, String remoteLocation) {
+	public RemoteLocation(String remoteAddress, String remoteLocation) {
 		super();
 		this.remoteAddress = remoteAddress;
 		this.remoteLocation = remoteLocation;
 	}
 
-	public SCPRemoteLocation(String remoteAddress,
+	public RemoteLocation(String remoteAddress,
 			String remoteLocation, String username, String password) {
 		super();
 		this.remoteAddress = remoteAddress;

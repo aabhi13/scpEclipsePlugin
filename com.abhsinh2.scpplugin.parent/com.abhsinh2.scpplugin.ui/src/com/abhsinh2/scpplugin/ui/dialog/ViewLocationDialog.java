@@ -10,12 +10,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.List;
 
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
+import com.abhsinh2.scpplugin.ui.model.Location;
 
 public class ViewLocationDialog extends Dialog {
 
-	private SCPLocation location;
-	public ViewLocationDialog(Shell shell, SCPLocation location) {
+	private Location location;
+	public ViewLocationDialog(Shell shell, Location location) {
 		super(shell);		
 		this.location = location;
 	}

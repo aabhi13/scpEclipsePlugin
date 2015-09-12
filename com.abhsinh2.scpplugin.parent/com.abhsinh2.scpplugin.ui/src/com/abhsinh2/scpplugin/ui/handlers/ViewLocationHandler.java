@@ -9,18 +9,16 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.abhsinh2.scpplugin.ui.dialog.ViewLocationDialog;
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
+import com.abhsinh2.scpplugin.ui.model.Location;
 import com.abhsinh2.scpplugin.ui.util.Utility;
 
 public class ViewLocationHandler extends AbstractHandler {
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		System.out.println("ViewLocationHandler");
-		
+	public Object execute(ExecutionEvent event) throws ExecutionException {		
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
 		if (selection instanceof IStructuredSelection) {
-			SCPLocation location = Utility.getSCPLocations((IStructuredSelection)selection).get(0);
+			Location location = Utility.getSCPLocations((IStructuredSelection)selection).get(0);
 			ViewLocationDialog dialog = new ViewLocationDialog(window.getShell(), location);
 			dialog.open();
 		}		

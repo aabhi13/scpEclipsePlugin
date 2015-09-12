@@ -16,8 +16,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
+import com.abhsinh2.scpplugin.ui.model.Location;
+import com.abhsinh2.scpplugin.ui.model.LocationManager;
 import com.abhsinh2.scpplugin.ui.util.Utility;
 
 public class SelectLocationWizardPage extends WizardPage implements Listener {
@@ -32,8 +32,8 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 
 	private boolean addNewLocation = false;
 	private boolean useSavedLocalFiles = true;
-	private SCPLocation location;
-	private SCPLocationManager locationManager = SCPLocationManager
+	private Location location;
+	private LocationManager locationManager = LocationManager
 			.getManager();
 	private IStructuredSelection selection;
 
@@ -154,12 +154,12 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 	}
 
 	private void populateComboBox() {
-		for (SCPLocation location : locationManager.getLocations()) {
+		for (Location location : locationManager.getLocations()) {
 			selectLocationCombo.add(location.getName());
 		}
 	}
 
-	public SCPLocation getLocation() {
+	public Location getLocation() {
 		return this.location;
 	}
 
@@ -198,7 +198,7 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 		} else if (source == useSelectedLocalFilesButton) {
 			useSavedLocalFiles = false;
 		} else if (source == selectLocationCombo) {
-			SCPLocation location = locationManager
+			Location location = locationManager
 					.getLocation(selectLocationCombo.getText());
 			if (location != null) {
 				this.location = location;

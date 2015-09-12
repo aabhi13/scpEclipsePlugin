@@ -1,4 +1,4 @@
-package com.abhsinh2.scpplugin.ui.util;
+package com.abhsinh2.scpplugin.ui.copy;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.abhsinh2.scpplugin.ui.SCPLog;
+import com.abhsinh2.scpplugin.ui.Logger;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-public class SCPCopyLocalToRemote {
+public class CopyLocalFilesToRemoteLocation {
 
 	String localFile;
 	String remoteMachine;
@@ -20,7 +20,7 @@ public class SCPCopyLocalToRemote {
 	String username;
 	String password;
 
-	public SCPCopyLocalToRemote(String localFile, String remoteMachine,
+	public CopyLocalFilesToRemoteLocation(String localFile, String remoteMachine,
 			String remoteLocation, String username, String password) {
 		this.localFile = localFile;
 		this.remoteMachine = remoteMachine;
@@ -129,7 +129,7 @@ public class SCPCopyLocalToRemote {
 			channel.disconnect();
 			session.disconnect();
 		} catch (Exception e) {
-			SCPLog.logError(e);
+			Logger.logError(e);
 			try {
 				if (fis != null)
 					fis.close();

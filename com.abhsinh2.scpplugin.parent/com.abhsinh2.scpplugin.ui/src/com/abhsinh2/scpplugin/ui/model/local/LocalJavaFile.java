@@ -9,17 +9,17 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
-public class SCPLocalJavaElement implements ISCPLocalLocation {
-	private SCPLocalFileType type;
+public class LocalJavaFile implements ILocalLocation {
+	private LocalFileType type;
 	private IJavaElement element;
 	private String name;
 
-	public SCPLocalJavaElement(SCPLocalFileType type, IJavaElement element) {
+	public LocalJavaFile(LocalFileType type, IJavaElement element) {
 		this.type = type;
 		this.element = element;
 	}
 
-	public static SCPLocalJavaElement loadFavorite(SCPLocalFileType type,
+	public static LocalJavaFile loadFavorite(LocalFileType type,
 			String info) {
 		IResource res = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(info));
@@ -28,7 +28,7 @@ public class SCPLocalJavaElement implements ISCPLocalLocation {
 		IJavaElement elem = JavaCore.create(res);
 		if (elem == null)
 			return null;
-		return new SCPLocalJavaElement(type, elem);
+		return new LocalJavaFile(type, elem);
 	}
 
 	public String getName() {
@@ -60,14 +60,14 @@ public class SCPLocalJavaElement implements ISCPLocalLocation {
 		return element.equals(obj);
 	}
 
-	public SCPLocalFileType getType() {
+	public LocalFileType getType() {
 		return type;
 	}
 
 	public boolean equals(Object obj) {
 		return this == obj
-				|| ((obj instanceof SCPLocalJavaElement) && element
-						.equals(((SCPLocalJavaElement) obj).element));
+				|| ((obj instanceof LocalJavaFile) && element
+						.equals(((LocalJavaFile) obj).element));
 	}
 
 	public int hashCode() {

@@ -17,11 +17,11 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.abhsinh2.scpplugin.ui.Activator;
-import com.abhsinh2.scpplugin.ui.SCPLog;
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
-import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
-import com.abhsinh2.scpplugin.ui.util.SCPCopyLocalToRemote;
+import com.abhsinh2.scpplugin.ui.Logger;
+import com.abhsinh2.scpplugin.ui.copy.CopyLocalFilesToRemoteLocation;
+import com.abhsinh2.scpplugin.ui.model.Location;
+import com.abhsinh2.scpplugin.ui.model.LocationManager;
+import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 import com.abhsinh2.scpplugin.ui.util.Utility;
 
 public class SelectLocationWizard extends Wizard implements INewWizard {
@@ -32,7 +32,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 	private SelectLocalFilesWizardPage selectLocalFilesWizardPage;
 	private ExecutionEvent executionEvent;
 
-	private SCPLocationManager locationManager = SCPLocationManager
+	private LocationManager locationManager = LocationManager
 			.getManager();
 
 	private boolean enableFinishButton = false;
@@ -58,7 +58,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 	public void addPages() {
 		setWindowTitle("SCP");
 		
-		List<SCPLocation> locations = Utility.getSCPLocations(this.initialSelection);
+		List<Location> locations = Utility.getSCPLocations(this.initialSelection);
 		if (locations != null && locations.size() > 0) {
 			// Edit command from View
 			createLocationWizardPage = new CreateLocationWizardPage(locations.get(0));
@@ -100,14 +100,14 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
-		SCPRemoteLocation remoteLocation = null;
+		RemoteLocation remoteLocation = null;
 		Collection<String> localFiles = null;
 
 		if (selectLocationWizardPage == null) {
 			remoteLocation = createLocationWizardPage.getSCPRemoteLocation();
 			localFiles = selectLocalFilesWizardPage.getLocalFilesPath();
 
-			SCPLocation location = new SCPLocation(
+			Location location = new Location(
 					createLocationWizardPage.getLocationName(), localFiles,
 					remoteLocation);
 			locationManager.addLocation(location);
@@ -123,7 +123,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 							.getSelectedLocalFiles();
 				}
 			} else {
-				SCPLocation location = selectLocationWizardPage.getLocation();
+				Location location = selectLocationWizardPage.getLocation();
 				remoteLocation = location.getRemoteLocation();
 
 				if (selectLocationWizardPage.isUseSavedLocalFiles()) {
@@ -140,7 +140,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	private boolean startCopying(final SCPRemoteLocation remoteLocation,
+	private boolean startCopying(final RemoteLocation remoteLocation,
 			final Collection<String> localFiles) {
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress() {
@@ -150,17 +150,17 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 				}
 			});
 		} catch (InvocationTargetException e) {
-			SCPLog.logError(e);
+			Logger.logError(e);
 			return false;
 		} catch (InterruptedException e) {
-			SCPLog.logError(e);
+			Logger.logError(e);
 			return false;
 		}
 
 		return true;
 	}
 
-	private void performOperation(final SCPRemoteLocation remoteLocation,
+	private void performOperation(final RemoteLocation remoteLocation,
 			final Collection<String> localFiles, IProgressMonitor monitor) {
 		try {
 			monitor.beginTask("Preparing", localFiles.size());
@@ -168,7 +168,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 			for (String localLocation : localFiles) {
 				monitor.subTask("Copying " + localLocation);
 
-				SCPCopyLocalToRemote copy = new SCPCopyLocalToRemote(
+				CopyLocalFilesToRemoteLocation copy = new CopyLocalFilesToRemoteLocation(
 						localLocation, remoteLocation.getRemoteAddress(),
 						remoteLocation.getRemoteLocation(),
 						remoteLocation.getUsername(),
@@ -190,7 +190,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 	}
 
 	private void startCopyingInProgressDialog(
-			final SCPRemoteLocation remoteLocation,
+			final RemoteLocation remoteLocation,
 			final Collection<String> localFiles) {
 		try {
 			IWorkbenchWindow window = HandlerUtil
@@ -204,7 +204,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 				}
 			});
 		} catch (Exception e) {
-			SCPLog.logError(e);
+			Logger.logError(e);
 		}
 	}
 

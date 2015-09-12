@@ -5,10 +5,10 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IMemento;
 
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
+import com.abhsinh2.scpplugin.ui.model.Location;
 import com.abhsinh2.scpplugin.ui.util.StringMatcher;
 
-public class SCPViewNameFilter extends ViewerFilter {
+public class LocaltionViewNameFilter extends ViewerFilter {
 	private static final String TAG_PATTERN = "pattern";
 	private static final String TAG_TYPE = "NameFilterInfo";
 
@@ -16,7 +16,7 @@ public class SCPViewNameFilter extends ViewerFilter {
 	private String pattern = "";
 	private StringMatcher matcher;
 
-	public SCPViewNameFilter(StructuredViewer viewer) {
+	public LocaltionViewNameFilter(StructuredViewer viewer) {
 		this.viewer = viewer;
 	}
 
@@ -42,7 +42,7 @@ public class SCPViewNameFilter extends ViewerFilter {
 	}
 
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
-		return matcher.match(((SCPLocation) element).getName());
+		return matcher.match(((Location) element).getName());
 	}
 
 	public void saveState(IMemento memento) {

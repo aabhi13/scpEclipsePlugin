@@ -23,9 +23,9 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
-import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
+import com.abhsinh2.scpplugin.ui.model.Location;
+import com.abhsinh2.scpplugin.ui.model.LocationManager;
+import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 
 public class CreateLocationWizardPage extends WizardPage implements Listener,
 		VerifyListener, FocusListener, ModifyListener {
@@ -37,8 +37,8 @@ public class CreateLocationWizardPage extends WizardPage implements Listener,
 	private Button savePasswordButton;
 	private boolean canFlipToNextPage = false;
 
-	private SCPLocationManager manager = SCPLocationManager.getManager();
-	private SCPLocation location;
+	private LocationManager manager = LocationManager.getManager();
+	private Location location;
 	private Status status;
 
 	private static final String IPADDRESS_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
@@ -59,7 +59,7 @@ public class CreateLocationWizardPage extends WizardPage implements Listener,
 		this("Create Location");
 	}
 
-	public CreateLocationWizardPage(SCPLocation location) {
+	public CreateLocationWizardPage(Location location) {
 		this("Edit Location");
 		this.location = location;
 	}
@@ -190,8 +190,8 @@ public class CreateLocationWizardPage extends WizardPage implements Listener,
 		return passwordTextBox.getText();
 	}
 
-	public SCPRemoteLocation getSCPRemoteLocation() {
-		return new SCPRemoteLocation(this.getRemoteMachine(),
+	public RemoteLocation getSCPRemoteLocation() {
+		return new RemoteLocation(this.getRemoteMachine(),
 				this.getRemoteLocation(), this.getRemoteUsername(),
 				this.getRemotePassword());
 	}

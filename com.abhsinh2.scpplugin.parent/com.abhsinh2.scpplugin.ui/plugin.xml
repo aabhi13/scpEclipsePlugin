@@ -55,7 +55,7 @@
       </category>
       <view
             category="com.abhsinh2.scpplugin.ui"
-            class="com.abhsinh2.scpplugin.ui.view.SCPView"
+            class="com.abhsinh2.scpplugin.ui.view.LocationView"
             id="com.abhsinh2.scpplugin.ui.SCPView"
             name="SCP"
             restorable="true">
