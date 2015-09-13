@@ -11,6 +11,8 @@ import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -19,6 +21,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import com.abhsinh2.scpplugin.ui.Activator;
 import com.abhsinh2.scpplugin.ui.Logger;
 import com.abhsinh2.scpplugin.ui.copy.CopyLocalFilesToRemoteLocation;
+import com.abhsinh2.scpplugin.ui.dialog.PasswordDialog;
 import com.abhsinh2.scpplugin.ui.model.Location;
 import com.abhsinh2.scpplugin.ui.model.LocationManager;
 import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
@@ -97,9 +100,15 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean canFinish() {
 		if (selectLocationWizardPage != null) {
-			if (!selectLocationWizardPage.isAddNewLocation()
-					&& selectLocationWizardPage.getLocation() != null) {
-				return true;
+			if (selectLocationWizardPage.isAddNewLocation()) {
+				if (createLocationWizardPage.isPageComplete()
+						&& selectLocalFilesWizardPage.isPageComplete()) {
+					return true;
+				}
+			} else {
+				if (selectLocationWizardPage.getLocation() != null) {
+					return true;
+				}
 			}
 		}
 		return enableFinishButton;
@@ -129,6 +138,11 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 					localFiles = selectLocationWizardPage
 							.getSelectedLocalFiles();
 				}
+				
+				Location location = new Location(
+						createLocationWizardPage.getLocationName(), localFiles,
+						remoteLocation);
+				locationManager.addLocation(location);
 			} else {
 				Location location = selectLocationWizardPage.getLocation();
 				remoteLocation = location.getRemoteLocation();
@@ -140,20 +154,31 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 							.getSelectedLocalFiles();
 				}
 			}
-		}
+		}		
 
-		this.startCopying(remoteLocation, localFiles);
+		if (remoteLocation.getPassword() != null
+				&& !remoteLocation.getPassword().isEmpty()) {
+			this.startCopying(remoteLocation, remoteLocation.getPassword(),
+					localFiles);
+		} else {
+			PasswordPrompt prompt = new PasswordPrompt("Please enter password");
+			Display.getDefault().syncExec(prompt);
+			String _password = prompt.getPassword();
+						
+			this.startCopying(remoteLocation, _password, localFiles);
+		}
 
 		return true;
 	}
 
 	private boolean startCopying(final RemoteLocation remoteLocation,
-			final Collection<String> localFiles) {
+			final String password, final Collection<String> localFiles) {
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
-					performOperation(remoteLocation, localFiles, monitor);
+					performOperation(remoteLocation, password, localFiles,
+							monitor);
 				}
 			});
 		} catch (InvocationTargetException e) {
@@ -168,7 +193,8 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 	}
 
 	private void performOperation(final RemoteLocation remoteLocation,
-			final Collection<String> localFiles, IProgressMonitor monitor) {
+			String password, final Collection<String> localFiles,
+			IProgressMonitor monitor) {
 		try {
 			monitor.beginTask("Preparing", localFiles.size());
 
@@ -178,8 +204,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 				CopyLocalFilesToRemoteLocation copy = new CopyLocalFilesToRemoteLocation(
 						localLocation, remoteLocation.getRemoteAddress(),
 						remoteLocation.getRemoteLocation(),
-						remoteLocation.getUsername(),
-						remoteLocation.getPassword());
+						remoteLocation.getUsername(), password);
 
 				// copy.copy();
 
@@ -197,7 +222,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 	}
 
 	private void startCopyingInProgressDialog(
-			final RemoteLocation remoteLocation,
+			final RemoteLocation remoteLocation, final String password,
 			final Collection<String> localFiles) {
 		try {
 			IWorkbenchWindow window = HandlerUtil
@@ -207,7 +232,8 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 			context.run(true, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
-					performOperation(remoteLocation, localFiles, monitor);
+					performOperation(remoteLocation, password, localFiles,
+							monitor);
 				}
 			});
 		} catch (Exception e) {
@@ -221,6 +247,28 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 
 	public void setEnableFinishButton(boolean enableFinishButton) {
 		this.enableFinishButton = enableFinishButton;
+	}
+
+	private class PasswordPrompt implements Runnable {
+		private String message;
+		private String password;
+
+		PasswordPrompt(String message) {
+			this.message = message;
+		}
+
+		public void run() {
+			Display display = Display.getCurrent();
+			Shell shell = new Shell(display);
+			PasswordDialog dialog = new PasswordDialog(shell, message);
+			dialog.open();
+			shell.dispose();
+			password = dialog.getPassword();
+		}
+
+		public String getPassword() {
+			return password;
+		}
 	}
 
 }

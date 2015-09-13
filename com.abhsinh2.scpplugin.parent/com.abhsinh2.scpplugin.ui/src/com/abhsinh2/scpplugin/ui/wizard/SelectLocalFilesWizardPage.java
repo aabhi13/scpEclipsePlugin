@@ -137,10 +137,15 @@ public class SelectLocalFilesWizardPage extends WizardPage implements Listener {
 	}
 
 	public IPath getLocalLocation() {
-		return ResourcesPlugin.getWorkspace().getRoot().getLocation();
+		return ResourcesPlugin.getWorkspace().getRoot().getLocation();		
 	}
 
 	public java.util.List<String> getLocalFilesPath() {
 		return this.finalLocalFileList;
+	}
+	
+	@Override
+	public boolean isPageComplete() {
+		return !finalLocalFileList.isEmpty();
 	}
 }

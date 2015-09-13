@@ -16,7 +16,7 @@ import com.jcraft.jsch.Session;
  * Copies local files to remote machine on remote location.
  * 
  * @author abhsinh2
- *
+ * 
  */
 public class CopyLocalFilesToRemoteLocation {
 
@@ -26,8 +26,9 @@ public class CopyLocalFilesToRemoteLocation {
 	private String username;
 	private String password;
 
-	public CopyLocalFilesToRemoteLocation(String localFile, String remoteMachine,
-			String remoteLocation, String username, String password) {
+	public CopyLocalFilesToRemoteLocation(String localFile,
+			String remoteMachine, String remoteLocation, String username,
+			String password) {
 		this.localFile = localFile;
 		this.remoteMachine = remoteMachine;
 		this.remoteLocation = remoteLocation;
@@ -35,28 +36,30 @@ public class CopyLocalFilesToRemoteLocation {
 		this.password = password;
 	}
 
-	public void copy() {		
+	public void copy() {
 		FileInputStream fis = null;
 		try {
 			JSch jsch = new JSch();
-			
+
 			String userHomeDir = System.getProperty("user.home");
 			String SSH_DIR = ".ssh";
 			String KNOWN_HOSTS = "known_hosts";
 			String ID_RSA = "id_rsa";
-			
-			File knowHostsFile = new File(userHomeDir + java.io.File.separator + SSH_DIR + java.io.File.separator + KNOWN_HOSTS);
-			File idRSAFile = new File(userHomeDir + java.io.File.separator + SSH_DIR + java.io.File.separator + ID_RSA);			
-						
-			jsch.setKnownHosts(knowHostsFile.getPath());			
+
+			File knowHostsFile = new File(userHomeDir + java.io.File.separator
+					+ SSH_DIR + java.io.File.separator + KNOWN_HOSTS);
+			File idRSAFile = new File(userHomeDir + java.io.File.separator
+					+ SSH_DIR + java.io.File.separator + ID_RSA);
+
+			jsch.setKnownHosts(knowHostsFile.getPath());
 			jsch.addIdentity(idRSAFile.getPath());
-			
-			java.util.Properties config = new java.util.Properties(); 
-			config.put("StrictHostKeyChecking", "no");			
-			
+
+			java.util.Properties config = new java.util.Properties();
+			config.put("StrictHostKeyChecking", "no");
+
 			Session session = jsch.getSession(username, remoteMachine, 22);
 			session.setConfig(config);
-			
+
 			// username and password will be given via UserInfo interface.
 			RemoteUserInfo ui = new RemoteUserInfo(this.password);
 			session.setUserInfo(ui);

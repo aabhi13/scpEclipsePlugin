@@ -132,8 +132,8 @@ public class LocationView extends ViewPart {
 	}
 
 	private void createTableSorter() {
-		Comparator<ILocalLocation> nameComparator = new Comparator<ILocalLocation>() {
-			public int compare(ILocalLocation i1, ILocalLocation i2) {
+		Comparator<Location> nameComparator = new Comparator<Location>() {
+			public int compare(Location i1, Location i2) {
 				return i1.getName().compareTo(i2.getName());
 			}
 		};

@@ -205,7 +205,6 @@ public class CreateLocationWizardPage extends WizardPage implements Listener,
 	@Override
 	public void handleEvent(Event event) {
 		Widget source = event.widget;
-
 		if (source == savePasswordButton) {
 			if (savePasswordButton.getSelection()) {
 				passwordTextBox.setEnabled(true);
@@ -213,7 +212,18 @@ public class CreateLocationWizardPage extends WizardPage implements Listener,
 				passwordTextBox.setEnabled(false);
 			}
 		}
+	}
 
+	@Override
+	public boolean isPageComplete() {
+		if (!isTextEmpty(nameTextBox) && !isTextEmpty(remoteMachineTextBox)
+				&& !isTextEmpty(remoteLocationTextBox)
+				&& !isTextEmpty(usernameTextBox)
+				&& getNextPage().isPageComplete()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override

@@ -205,7 +205,7 @@ public class LocationManager {
 		}
 	}
 
-	private void saveLocations(XMLMemento memento) {
+	private void saveLocations(XMLMemento memento) {		
 		for (String key : this.locations.keySet()) {
 			Location location = this.locations.get(key);
 
