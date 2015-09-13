@@ -36,11 +36,6 @@ public class NewLocationDialog extends Dialog {
 	
 	private LocationDialog prevLocationDialog;
 
-	/**
-	 * Create the dialog.
-	 * 
-	 * @param parentShell
-	 */
 	public NewLocationDialog(Shell parentShell,
 			Collection<String> localLocations,
 			LocationDialog prevLocationDialog) {
@@ -49,11 +44,6 @@ public class NewLocationDialog extends Dialog {
 		this.prevLocationDialog = prevLocationDialog;
 	}
 
-	/**
-	 * Create contents of the dialog.
-	 * 
-	 * @param parent
-	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
@@ -189,12 +179,7 @@ public class NewLocationDialog extends Dialog {
 
 		super.okPressed();
 	}
-
-	/**
-	 * Create contents of the button bar.
-	 * 
-	 * @param parent
-	 */
+	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
@@ -207,10 +192,7 @@ public class NewLocationDialog extends Dialog {
 		super.configureShell(newShell);
 		newShell.setText("Add Remote Location Details");
 	}
-
-	/**
-	 * Return the initial size of the dialog.
-	 */
+	
 	@Override
 	protected Point getInitialSize() {
 		return new Point(553, 364);

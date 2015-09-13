@@ -19,6 +19,12 @@ import org.eclipse.swt.widgets.Widget;
 
 import com.abhsinh2.scpplugin.ui.util.Utility;
 
+/**
+ * Wizard page to add/edit local files to be copied to remote machine.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class SelectLocalFilesWizardPage extends WizardPage implements Listener {
 
 	private List localFilesList;
@@ -27,7 +33,7 @@ public class SelectLocalFilesWizardPage extends WizardPage implements Listener {
 
 	private java.util.List<String> finalLocalFileList = new ArrayList<String>();
 	private IStructuredSelection selection;
-	
+
 	protected SelectLocalFilesWizardPage(String pageName) {
 		super(pageName);
 	}
@@ -52,7 +58,7 @@ public class SelectLocalFilesWizardPage extends WizardPage implements Listener {
 		selectedLocalFilesLabel.setBounds(21, 25, 120, 14);
 		selectedLocalFilesLabel.setText("Selected Local Files:");
 
-		removeSelectedFilesButton = new Button(container, SWT.NONE);		
+		removeSelectedFilesButton = new Button(container, SWT.NONE);
 		removeSelectedFilesButton.setBounds(21, 224, 163, 28);
 		removeSelectedFilesButton.setText("Remove Selected Files");
 		removeSelectedFilesButton.addListener(SWT.Selection, this);
@@ -65,20 +71,20 @@ public class SelectLocalFilesWizardPage extends WizardPage implements Listener {
 		populateSWTList();
 	}
 
-	private void populateSWTList() {		
+	private void populateSWTList() {
 		for (String filepath : Utility.getSelectedFiles(this.selection)) {
 			localFilesList.add(filepath);
 			finalLocalFileList.add(filepath);
 		}
 	}
-	
+
 	@Override
 	public void handleEvent(Event event) {
 		Widget source = event.widget;
 		if (source == removeSelectedFilesButton) {
 			removeSelectedFilesFromList();
 		}
-		
+
 		if (source == addNewFilesButton) {
 			addFileToList();
 		}
@@ -89,7 +95,7 @@ public class SelectLocalFilesWizardPage extends WizardPage implements Listener {
 		for (String selectedFile : selectedFilesFromList) {
 			this.localFilesList.remove(selectedFile);
 			this.finalLocalFileList.remove(selectedFile);
-		}		
+		}
 	}
 
 	private void addFileToList() {
@@ -97,7 +103,7 @@ public class SelectLocalFilesWizardPage extends WizardPage implements Listener {
 	}
 
 	/**
-	 * Open a file browser dialog to locate a destination file
+	 * Open a file browser dialog to locate a file
 	 */
 	protected void browseForLocalFile() {
 		IPath path = browse(getLocalLocation(), false);
@@ -107,7 +113,7 @@ public class SelectLocalFilesWizardPage extends WizardPage implements Listener {
 		if (rootLoc.isPrefixOf(path))
 			path = path.setDevice(null).removeFirstSegments(
 					rootLoc.segmentCount());
-		
+
 		this.localFilesList.add(path.toString());
 		this.finalLocalFileList.add(path.toString());
 	}

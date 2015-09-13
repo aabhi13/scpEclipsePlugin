@@ -27,6 +27,12 @@ import com.abhsinh2.scpplugin.ui.model.Location;
 import com.abhsinh2.scpplugin.ui.model.LocationManager;
 import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 
+/**
+ * Wizard page to create or edit location.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class CreateLocationWizardPage extends WizardPage implements Listener,
 		VerifyListener, FocusListener, ModifyListener {
 	private Text nameTextBox;
@@ -211,10 +217,10 @@ public class CreateLocationWizardPage extends WizardPage implements Listener,
 	}
 
 	@Override
-	public boolean canFlipToNextPage() {		
-		if (getErrorMessage() != null) 
+	public boolean canFlipToNextPage() {
+		if (getErrorMessage() != null)
 			return false;
-		
+
 		if (this.isTextEmpty(usernameTextBox)) {
 			return false;
 		}
@@ -222,7 +228,7 @@ public class CreateLocationWizardPage extends WizardPage implements Listener,
 		if (this.isTextEmpty(remoteLocationTextBox)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -316,7 +322,8 @@ public class CreateLocationWizardPage extends WizardPage implements Listener,
 	}
 
 	private boolean isTextEmpty(Text text) {
-		if (text == null || text.getText() == null || text.getText().trim().isEmpty()) {
+		if (text == null || text.getText() == null
+				|| text.getText().trim().isEmpty()) {
 			return true;
 		}
 		return false;

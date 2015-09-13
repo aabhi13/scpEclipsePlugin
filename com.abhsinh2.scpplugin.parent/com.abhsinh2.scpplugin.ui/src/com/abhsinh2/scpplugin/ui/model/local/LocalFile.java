@@ -5,6 +5,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
+/**
+ * POJO for any local file.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class LocalFile implements ILocalLocation {
 
 	private LocalFileType type;
@@ -16,8 +22,7 @@ public class LocalFile implements ILocalLocation {
 		this.resource = resource;
 	}
 
-	public static LocalFile loadFavorite(LocalFileType type,
-			String info) {
+	public static LocalFile loadFavorite(LocalFileType type, String info) {
 		IResource res = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(info));
 		if (res == null)
@@ -38,11 +43,10 @@ public class LocalFile implements ILocalLocation {
 
 	public String getLocation() {
 		/*
-		IPath path = resource.getLocation().removeLastSegments(1);
-		if (path.segmentCount() == 0)
-			return "";
-		return path.toString();*/
-		
+		 * IPath path = resource.getLocation().removeLastSegments(1); if
+		 * (path.segmentCount() == 0) return ""; return path.toString();
+		 */
+
 		return resource.getLocation().toString();
 	}
 

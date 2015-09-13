@@ -22,6 +22,13 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
 
+/**
+ * Toolbar Action on View to show Remove Button. Remove button used to remove
+ * selected location.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class RemoveLocationContributionItem extends ContributionItem {
 	private final IViewSite viewSite;
 	private final IHandler handler;

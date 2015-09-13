@@ -9,6 +9,12 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
+/**
+ * Handles Java related files.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class LocalJavaFile implements ILocalLocation {
 	private LocalFileType type;
 	private IJavaElement element;
@@ -19,8 +25,7 @@ public class LocalJavaFile implements ILocalLocation {
 		this.element = element;
 	}
 
-	public static LocalJavaFile loadFavorite(LocalFileType type,
-			String info) {
+	public static LocalJavaFile loadFavorite(LocalFileType type, String info) {
 		IResource res = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(info));
 		if (res == null)

@@ -19,6 +19,12 @@ import com.abhsinh2.scpplugin.ui.Activator;
 import com.abhsinh2.scpplugin.ui.model.local.ILocalLocation;
 import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 
+/**
+ * Manager to manage location. Manages add/edit/remove location.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class LocationManager {
 
 	private static final String TAG_LOCATIONS = "Locations";
@@ -26,7 +32,7 @@ public class LocationManager {
 	private static final String TAG_NAME = "Name";
 	private static final String TAG_REMOTE_ADDRESS = "RemoteAddress";
 	private static final String TAG_REMOTE_LOCATION = "RemoteLocation";
-	//private static final String TAG_LOCAL_LOCATIONS = "LocalLocations";
+	// private static final String TAG_LOCAL_LOCATIONS = "LocalLocations";
 	private static final String TAG_LOCAL_LOCATION = "LocalLocation";
 	private static final String TAG_USERNAME = "Username";
 	private static final String TAG_PASSWORD = "Password";
@@ -43,11 +49,6 @@ public class LocationManager {
 		if (manager == null)
 			manager = new LocationManager();
 		return manager;
-	}
-
-	// TODO: To be removed . used for testing
-	public Map<String, Location> getAllLocations() {
-		return locations;
 	}
 
 	public Collection<Location> getLocations() {
@@ -118,15 +119,14 @@ public class LocationManager {
 			listeners.add(listener);
 	}
 
-	public void removeLocationManagerListener(
-			LocationManagerListener listener) {
+	public void removeLocationManagerListener(LocationManagerListener listener) {
 		listeners.remove(listener);
 	}
 
 	private void fireFavoritesChanged(Location location,
 			LocationManagerOperationType eventType) {
-		LocationManagerEvent event = new LocationManagerEvent(this,
-				location, eventType);
+		LocationManagerEvent event = new LocationManagerEvent(this, location,
+				eventType);
 		for (Iterator<LocationManagerListener> iter = listeners.iterator(); iter
 				.hasNext();) {
 			iter.next().locationChanged(event);
@@ -153,22 +153,22 @@ public class LocationManager {
 
 	private void loadLocations(XMLMemento memento) {
 		IMemento[] locations = memento.getChildren(TAG_LOCATION);
-		for (int i = 0; i < locations.length; i++) {			
-			
+		for (int i = 0; i < locations.length; i++) {
+
 			Collection<String> localFiles = new ArrayList<String>();
-			IMemento[] locationLocations = locations[i].getChildren(TAG_LOCAL_LOCATION);
+			IMemento[] locationLocations = locations[i]
+					.getChildren(TAG_LOCAL_LOCATION);
 			if (locationLocations != null) {
 				for (int j = 0; j < locationLocations.length; j++) {
 					localFiles.add(locationLocations[i].getString(TAG_NAME));
 				}
 			}
-			
+
 			Location item = getLocation(locations[i].getString(TAG_NAME),
 					locations[i].getString(TAG_REMOTE_ADDRESS),
 					locations[i].getString(TAG_REMOTE_LOCATION),
 					locations[i].getString(TAG_USERNAME),
-					locations[i].getString(TAG_PASSWORD), 
-					localFiles);
+					locations[i].getString(TAG_PASSWORD), localFiles);
 
 			if (item != null)
 				this.locations.put(item.getName(), item);
@@ -176,15 +176,16 @@ public class LocationManager {
 	}
 
 	public Location getLocation(String name, String remoteAddress,
-			String remoteLocation, String username, String password, Collection<String> localFiles) {
+			String remoteLocation, String username, String password,
+			Collection<String> localFiles) {
 		RemoteLocation remote = new RemoteLocation(remoteAddress,
 				remoteLocation, username, password);
 		return new Location(name, localFiles, remote);
 	}
 
 	public void saveLocations() {
-		//if (this.locations == null || this.locations.isEmpty())
-		//	return;
+		// if (this.locations == null || this.locations.isEmpty())
+		// return;
 
 		XMLMemento memento = XMLMemento.createWriteRoot(TAG_LOCATIONS);
 		saveLocations(memento);
@@ -227,8 +228,7 @@ public class LocationManager {
 				for (String localLocation : localLocationList) {
 					IMemento localLocationElement = locationElement
 							.createChild(TAG_LOCAL_LOCATION);
-					localLocationElement.putString(TAG_NAME,
-							localLocation);
+					localLocationElement.putString(TAG_NAME, localLocation);
 				}
 			}
 		}
@@ -241,17 +241,17 @@ public class LocationManager {
 			if (item != null)
 				result.add(item);
 		}
-		return (ILocalLocation[]) result
-				.toArray(new ILocalLocation[result.size()]);
+		return (ILocalLocation[]) result.toArray(new ILocalLocation[result
+				.size()]);
 	}
 
 	private ILocalLocation existingLocationFor(Object obj) {
 		if (obj == null)
 			return null;
-		
+
 		if (obj instanceof ILocalLocation)
 			return (ILocalLocation) obj;
-		
+
 		return null;
 	}
 
@@ -259,6 +259,10 @@ public class LocationManager {
 		File file = Activator.getDefault().getStateLocation()
 				.append("favorites.xml").toFile();
 		return file;
+	}
+	
+	public boolean isLocationsEmpty() {
+		return locations.isEmpty();
 	}
 
 }

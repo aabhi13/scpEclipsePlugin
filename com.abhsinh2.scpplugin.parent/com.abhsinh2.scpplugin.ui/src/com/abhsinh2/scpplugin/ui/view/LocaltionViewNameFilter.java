@@ -8,6 +8,12 @@ import org.eclipse.ui.IMemento;
 import com.abhsinh2.scpplugin.ui.model.Location;
 import com.abhsinh2.scpplugin.ui.util.StringMatcher;
 
+/**
+ * Provides Filter in View.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class LocaltionViewNameFilter extends ViewerFilter {
 	private static final String TAG_PATTERN = "pattern";
 	private static final String TAG_TYPE = "NameFilterInfo";

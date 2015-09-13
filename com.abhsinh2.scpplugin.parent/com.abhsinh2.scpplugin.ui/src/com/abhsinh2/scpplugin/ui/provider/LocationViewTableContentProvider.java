@@ -9,8 +9,14 @@ import com.abhsinh2.scpplugin.ui.model.LocationManagerEvent;
 import com.abhsinh2.scpplugin.ui.model.LocationManagerListener;
 import com.abhsinh2.scpplugin.ui.model.LocationManagerOperationType;
 
-public class LocationViewTableContentProvider implements IStructuredContentProvider,
-		LocationManagerListener {
+/**
+ * Provides content to View in tabular form.
+ * 
+ * @author abhsinh2
+ * 
+ */
+public class LocationViewTableContentProvider implements
+		IStructuredContentProvider, LocationManagerListener {
 	private TableViewer viewer;
 	private LocationManager manager;
 

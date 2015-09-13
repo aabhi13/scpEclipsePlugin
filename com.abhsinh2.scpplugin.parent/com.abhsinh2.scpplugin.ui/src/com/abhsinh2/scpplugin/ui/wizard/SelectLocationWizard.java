@@ -24,6 +24,12 @@ import com.abhsinh2.scpplugin.ui.model.LocationManager;
 import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 import com.abhsinh2.scpplugin.ui.util.Utility;
 
+/**
+ * Wizard to select existing location or create new location and files.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class SelectLocationWizard extends Wizard implements INewWizard {
 
 	private IStructuredSelection initialSelection;
@@ -32,8 +38,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 	private SelectLocalFilesWizardPage selectLocalFilesWizardPage;
 	private ExecutionEvent executionEvent;
 
-	private LocationManager locationManager = LocationManager
-			.getManager();
+	private LocationManager locationManager = LocationManager.getManager();
 
 	private boolean enableFinishButton = false;
 
@@ -57,14 +62,16 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 
 	public void addPages() {
 		setWindowTitle("SCP");
-		
-		List<Location> locations = Utility.getSCPLocations(this.initialSelection);
+
+		List<Location> locations = Utility
+				.getSCPLocations(this.initialSelection);
 		if (locations != null && locations.size() > 0) {
 			// Edit command from View
-			createLocationWizardPage = new CreateLocationWizardPage(locations.get(0));
-			addPage(createLocationWizardPage);			
+			createLocationWizardPage = new CreateLocationWizardPage(
+					locations.get(0));
+			addPage(createLocationWizardPage);
 		} else {
-			if (locationManager.getAllLocations().isEmpty()) {
+			if (locationManager.isLocationsEmpty()) {
 				createLocationWizardPage = new CreateLocationWizardPage();
 				addPage(createLocationWizardPage);
 			} else {
@@ -75,7 +82,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 				createLocationWizardPage = new CreateLocationWizardPage();
 				addPage(createLocationWizardPage);
 			}
-		}		
+		}
 
 		selectLocalFilesWizardPage = new SelectLocalFilesWizardPage(
 				this.initialSelection);

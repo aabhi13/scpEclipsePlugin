@@ -12,8 +12,16 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import com.abhsinh2.scpplugin.ui.model.Location;
 import com.abhsinh2.scpplugin.ui.model.LocationManager;
 
+/**
+ * Removes selected Location from View.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class RemoveLocationHandler extends AbstractHandler {
-	public Object execute(ExecutionEvent event) throws ExecutionException {		
+	
+	@SuppressWarnings("unchecked")
+	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 
 		if (selection instanceof IStructuredSelection) {

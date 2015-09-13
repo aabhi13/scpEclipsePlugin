@@ -9,6 +9,10 @@ import org.eclipse.ui.IMemento;
 import com.abhsinh2.scpplugin.ui.view.LocaltionViewNameFilter;
 
 /**
+ * Opens a dialog to take input for name filter in view.
+ * 
+ * @author abhsinh2
+ *
  */
 public class ViewFilterAction extends Action {
 	private final Shell shell;

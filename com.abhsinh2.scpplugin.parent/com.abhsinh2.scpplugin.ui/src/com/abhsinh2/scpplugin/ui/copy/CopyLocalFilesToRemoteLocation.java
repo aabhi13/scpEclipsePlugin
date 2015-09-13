@@ -12,13 +12,19 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
+/**
+ * Copies local files to remote machine on remote location.
+ * 
+ * @author abhsinh2
+ *
+ */
 public class CopyLocalFilesToRemoteLocation {
 
-	String localFile;
-	String remoteMachine;
-	String remoteLocation;
-	String username;
-	String password;
+	private String localFile;
+	private String remoteMachine;
+	private String remoteLocation;
+	private String username;
+	private String password;
 
 	public CopyLocalFilesToRemoteLocation(String localFile, String remoteMachine,
 			String remoteLocation, String username, String password) {
@@ -168,7 +174,7 @@ public class CopyLocalFilesToRemoteLocation {
 
 	@Override
 	public String toString() {
-		return "SCPCopyLocalToRemote [localFile=" + localFile
+		return "CopyLocalFilesToRemoteLocation [localFile=" + localFile
 				+ ", remoteMachine=" + remoteMachine + ", remoteLocation="
 				+ remoteLocation + ", username=" + username + ", password="
 				+ password + "]";

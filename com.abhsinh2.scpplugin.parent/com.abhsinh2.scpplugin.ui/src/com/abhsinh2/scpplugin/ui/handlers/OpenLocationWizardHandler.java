@@ -12,6 +12,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.abhsinh2.scpplugin.ui.wizard.SelectLocationWizard;
 
+/**
+ * Opens Location Selection Wizard.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class OpenLocationWizardHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {

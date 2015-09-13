@@ -2,6 +2,12 @@ package com.abhsinh2.scpplugin.ui.model.remote;
 
 import org.eclipse.core.runtime.IAdaptable;
 
+/**
+ * Model to store Remote location details.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class RemoteLocation implements IAdaptable {
 	private String remoteAddress;
 	private String remoteLocation;
@@ -14,8 +20,8 @@ public class RemoteLocation implements IAdaptable {
 		this.remoteLocation = remoteLocation;
 	}
 
-	public RemoteLocation(String remoteAddress,
-			String remoteLocation, String username, String password) {
+	public RemoteLocation(String remoteAddress, String remoteLocation,
+			String username, String password) {
 		super();
 		this.remoteAddress = remoteAddress;
 		this.remoteLocation = remoteLocation;

@@ -11,6 +11,12 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
+/**
+ * Defines which type do we support.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public abstract class LocalFileType implements Comparable<LocalFileType> {
 
 	private final String id;
@@ -37,8 +43,8 @@ public abstract class LocalFileType implements Comparable<LocalFileType> {
 		return this.ordinal - other.ordinal;
 	}
 
-	public static final LocalFileType UNKNOWN = new LocalFileType(
-			"Unknown", "Unknown", 0) {
+	public static final LocalFileType UNKNOWN = new LocalFileType("Unknown",
+			"Unknown", 0) {
 		public ILocalLocation newLocation(Object obj) {
 			return null;
 		}
@@ -72,8 +78,8 @@ public abstract class LocalFileType implements Comparable<LocalFileType> {
 		}
 	};
 
-	public static final LocalFileType JAVA_PROJECT = new LocalFileType(
-			"JProj", "Java Project", 4) {
+	public static final LocalFileType JAVA_PROJECT = new LocalFileType("JProj",
+			"Java Project", 4) {
 		public ILocalLocation newLocation(Object obj) {
 			if (!(obj instanceof IJavaProject))
 				return null;
@@ -91,8 +97,8 @@ public abstract class LocalFileType implements Comparable<LocalFileType> {
 		}
 	};
 
-	public static final LocalFileType JAVA_PACKAGE = new LocalFileType(
-			"JPkg", "Java Package", 6) {
+	public static final LocalFileType JAVA_PACKAGE = new LocalFileType("JPkg",
+			"Java Package", 6) {
 
 		public ILocalLocation newLocation(Object obj) {
 			if (!(obj instanceof IPackageFragment))
@@ -137,8 +143,8 @@ public abstract class LocalFileType implements Comparable<LocalFileType> {
 		}
 	};
 
-	public static final LocalFileType JAVA_CLASS = new LocalFileType(
-			"JClass", "Java Class", 10) {
+	public static final LocalFileType JAVA_CLASS = new LocalFileType("JClass",
+			"Java Class", 10) {
 
 		public ILocalLocation newLocation(Object obj) {
 			if (!(obj instanceof IType))

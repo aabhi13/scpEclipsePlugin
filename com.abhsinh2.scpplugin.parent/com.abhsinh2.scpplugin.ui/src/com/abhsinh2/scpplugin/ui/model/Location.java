@@ -6,6 +6,12 @@ import org.eclipse.core.runtime.IAdaptable;
 
 import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 
+/**
+ * POJO to store remote machine and local files details.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class Location implements IAdaptable {
 	private String name;
 	private Collection<String> localFiles;

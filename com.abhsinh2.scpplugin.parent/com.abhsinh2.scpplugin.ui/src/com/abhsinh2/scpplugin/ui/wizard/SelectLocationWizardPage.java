@@ -20,6 +20,12 @@ import com.abhsinh2.scpplugin.ui.model.Location;
 import com.abhsinh2.scpplugin.ui.model.LocationManager;
 import com.abhsinh2.scpplugin.ui.util.Utility;
 
+/**
+ * Wizard page to select an existing saved location.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class SelectLocationWizardPage extends WizardPage implements Listener {
 
 	private Button selectExistingRemoteLocationButton;
@@ -33,8 +39,7 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 	private boolean addNewLocation = false;
 	private boolean useSavedLocalFiles = true;
 	private Location location;
-	private LocationManager locationManager = LocationManager
-			.getManager();
+	private LocationManager locationManager = LocationManager.getManager();
 	private IStructuredSelection selection;
 
 	protected SelectLocationWizardPage(String pageName) {
@@ -109,8 +114,7 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 		fd_remoteMachineLabel.widthHint = 426;
 		fd_remoteMachineLabel.minimumWidth = 20;
 		selectedRemoteMachineValueLabel.setLayoutData(fd_remoteMachineLabel);
-		selectedRemoteMachineValueLabel
-				.setText("<>");
+		selectedRemoteMachineValueLabel.setText("<>");
 
 		final Label label_3 = new Label(container, SWT.NONE);
 		final GridData gridData_3 = new GridData();
@@ -126,8 +130,7 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 		gd_selectedRemoteLocationValueLabel.widthHint = 426;
 		selectedRemoteLocationValueLabel
 				.setLayoutData(gd_selectedRemoteLocationValueLabel);
-		selectedRemoteLocationValueLabel
-				.setText("<>");
+		selectedRemoteLocationValueLabel.setText("<>");
 
 		final Label label_4 = new Label(container, SWT.NONE);
 		final GridData gridData_4 = new GridData();
@@ -145,8 +148,8 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 		useSavedLocalFilesButton.addListener(SWT.Selection, this);
 		useSavedLocalFilesButton.setText("Use saved local files");
 
-		useSelectedLocalFilesButton = new Button(localFilesSelectionButtonGroup,
-				SWT.RADIO);
+		useSelectedLocalFilesButton = new Button(
+				localFilesSelectionButtonGroup, SWT.RADIO);
 		useSelectedLocalFilesButton.addListener(SWT.Selection, this);
 		useSelectedLocalFilesButton.setText("Use current selected files");
 
@@ -167,10 +170,10 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 	public boolean isPageComplete() {
 		return super.isPageComplete();
 	}
-	
+
 	@Override
 	public SelectLocationWizard getWizard() {
-		return (SelectLocationWizard)super.getWizard();
+		return (SelectLocationWizard) super.getWizard();
 	}
 
 	@Override
@@ -179,27 +182,27 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 
 		if (source == selectExistingRemoteLocationButton) {
 			addNewLocation = false;
-			
+
 			selectLocationCombo.setEnabled(true);
 			useSavedLocalFilesButton.setEnabled(true);
 			useSelectedLocalFilesButton.setEnabled(true);
-			
+
 			getWizard().getContainer().updateButtons();
 		} else if (source == addNewRemoteLocationButton) {
 			addNewLocation = true;
-			
+
 			selectLocationCombo.setEnabled(false);
 			useSavedLocalFilesButton.setEnabled(false);
 			useSelectedLocalFilesButton.setEnabled(false);
-			
+
 			getWizard().getContainer().updateButtons();
 		} else if (source == useSavedLocalFilesButton) {
 			useSavedLocalFiles = true;
 		} else if (source == useSelectedLocalFilesButton) {
 			useSavedLocalFiles = false;
 		} else if (source == selectLocationCombo) {
-			Location location = locationManager
-					.getLocation(selectLocationCombo.getText());
+			Location location = locationManager.getLocation(selectLocationCombo
+					.getText());
 			if (location != null) {
 				this.location = location;
 				selectedRemoteMachineValueLabel.setText(location
@@ -210,7 +213,7 @@ public class SelectLocationWizardPage extends WizardPage implements Listener {
 				// SelectLocationWizardPage.this.getShell().pack();
 				// selectedRemoteMachineValueLabel.;
 				// selectedRemoteLocationValueLabel.redraw();
-				
+
 				getWizard().getContainer().updateButtons();
 			}
 		}

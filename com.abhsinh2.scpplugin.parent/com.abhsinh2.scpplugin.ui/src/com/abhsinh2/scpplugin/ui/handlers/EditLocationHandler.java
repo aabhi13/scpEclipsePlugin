@@ -12,8 +12,14 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.abhsinh2.scpplugin.ui.wizard.SelectLocationWizard;
 
+/**
+ * Opens Edit Location dialog.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class EditLocationHandler extends AbstractHandler {
-	public Object execute(ExecutionEvent event) throws ExecutionException {		
+	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 

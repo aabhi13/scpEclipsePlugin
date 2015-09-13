@@ -70,11 +70,6 @@ public class LocationDialog extends Dialog {
 	
 	private Button okButton;
 
-	/**
-	 * Create the dialog.
-	 * 
-	 * @param parentShell
-	 */
 	public LocationDialog(Shell parentShell, ExecutionEvent event, Collection<String> localLocations) {
 		super(parentShell);
 
@@ -82,12 +77,7 @@ public class LocationDialog extends Dialog {
 		this.event = event;
 		this.currentSelectedLocation = localLocations;
 	}
-
-	/**
-	 * Create contents of the dialog.
-	 * 
-	 * @param parent
-	 */
+	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 
@@ -262,12 +252,7 @@ public class LocationDialog extends Dialog {
 			locationManager.addLocationManagerListener(listener);
 		}
 	}
-
-	/**
-	 * Create contents of the button bar.
-	 * 
-	 * @param parent
-	 */
+	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
@@ -278,16 +263,14 @@ public class LocationDialog extends Dialog {
 	}
 
 	@Override
-	protected void okPressed() {
-		
+	protected void okPressed() {		
 		if (useCurrentSelection) {
 			//staryCopying(currentSelectedLocation);
 			startCopyingInProgressDialog(currentSelectedLocation);
 		} else if (useSavedLocation) {
 			//staryCopying(remoteLocation.getLocalFiles());
 			startCopyingInProgressDialog(remoteLocation.getLocalFiles());
-		}
-		
+		}		
 		super.okPressed();
 	}
 

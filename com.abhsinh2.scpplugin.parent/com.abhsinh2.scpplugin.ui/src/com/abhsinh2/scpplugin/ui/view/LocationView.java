@@ -55,6 +55,12 @@ import com.abhsinh2.scpplugin.ui.provider.LocationViewTableLabelProvider;
 import com.abhsinh2.scpplugin.ui.provider.LocationViewTableContentProvider;
 import com.abhsinh2.scpplugin.ui.util.Utility;
 
+/**
+ * Defines View when locations can be viewed, edited or removed.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class LocationView extends ViewPart {
 
 	public static final String ID = "com.abhsinh2.scpplugin.ui.SCPView";
@@ -72,11 +78,11 @@ public class LocationView extends ViewPart {
 	private IHandler removeHandler;
 	private IHandler editHandler;
 	private IHandler viewHandler;
-	
+
 	private RemoveLocationContributionItem removeContributionItem;
 	private EditLocationContributionItem editContributionItem;
 	private ViewLocationContributionItem viewContributionItem;
-	
+
 	private ISelectionListener pageSelectionListener;
 
 	public LocationView() {
@@ -88,7 +94,7 @@ public class LocationView extends ViewPart {
 		createContributions();
 		createContextMenu();
 		createToolbarButtons();
-		//createViewPulldownMenu();
+		// createViewPulldownMenu();
 		hookGlobalHandlers();
 		createInlineEditor();
 		hookMouse();
@@ -145,13 +151,13 @@ public class LocationView extends ViewPart {
 		removeHandler = new RemoveLocationHandler();
 		editHandler = new EditLocationHandler();
 		viewHandler = new ViewLocationHandler();
-		
+
 		removeContributionItem = new RemoveLocationContributionItem(
 				getViewSite(), removeHandler);
-		editContributionItem = new EditLocationContributionItem(
-				getViewSite(), editHandler);
-		viewContributionItem = new ViewLocationContributionItem(
-				getViewSite(), viewHandler);
+		editContributionItem = new EditLocationContributionItem(getViewSite(),
+				editHandler);
+		viewContributionItem = new ViewLocationContributionItem(getViewSite(),
+				viewHandler);
 	}
 
 	private void createContextMenu() {
@@ -168,17 +174,17 @@ public class LocationView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager menuMgr) {
-		//menuMgr.add(new Separator(""));
+		// menuMgr.add(new Separator(""));
 		menuMgr.add(viewContributionItem);
 		menuMgr.add(new Separator("edit"));
 		menuMgr.add(editContributionItem);
-		//menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		// menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void createToolbarButtons() {
 		IToolBarManager toolBarMgr = getViewSite().getActionBars()
 				.getToolBarManager();
-		//toolBarMgr.add(new GroupMarker("edit"));
+		// toolBarMgr.add(new GroupMarker("edit"));
 		toolBarMgr.add(removeContributionItem);
 	}
 
@@ -208,8 +214,8 @@ public class LocationView extends ViewPart {
 	 */
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
-		//sorter.saveState(memento);
-		//filterAction.saveState(memento);
+		// sorter.saveState(memento);
+		// filterAction.saveState(memento);
 	}
 
 	private void hookPageSelection() {
@@ -236,7 +242,8 @@ public class LocationView extends ViewPart {
 	}
 
 	private void createInlineEditor() {
-		TableViewerColumn column = new TableViewerColumn(tableViewer, nameColumn);
+		TableViewerColumn column = new TableViewerColumn(tableViewer,
+				nameColumn);
 
 		column.setLabelProvider(new ColumnLabelProvider() {
 			public String getText(Object element) {
@@ -302,31 +309,34 @@ public class LocationView extends ViewPart {
 	private void hookGlobalHandlers() {
 		final IHandlerService handlerService = (IHandlerService) getViewSite()
 				.getService(IHandlerService.class);
-		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			private IHandlerActivation removeActivation;
+		tableViewer
+				.addSelectionChangedListener(new ISelectionChangedListener() {
+					private IHandlerActivation removeActivation;
 
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (event.getSelection().isEmpty()) {
-					if (removeActivation != null) {
-						handlerService.deactivateHandler(removeActivation);
-						removeActivation = null;
+					public void selectionChanged(SelectionChangedEvent event) {
+						if (event.getSelection().isEmpty()) {
+							if (removeActivation != null) {
+								handlerService
+										.deactivateHandler(removeActivation);
+								removeActivation = null;
+							}
+						} else {
+							if (removeActivation == null) {
+								removeActivation = handlerService
+										.activateHandler(
+												IWorkbenchActionDefinitionIds.DELETE,
+												removeHandler);
+							}
+						}
 					}
-				} else {
-					if (removeActivation == null) {
-						removeActivation = handlerService.activateHandler(
-								IWorkbenchActionDefinitionIds.DELETE,
-								removeHandler);
-					}
-				}
-			}
-		});
+				});
 	}
 
 	private void hookMouse() {
 		tableViewer.getTable().addMouseListener(new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent e) {
-				Utility.openEditor(getSite()
-						.getPage(), tableViewer.getSelection());
+				Utility.openEditor(getSite().getPage(),
+						tableViewer.getSelection());
 			}
 		});
 	}
@@ -339,7 +349,7 @@ public class LocationView extends ViewPart {
 	 * for later.
 	 */
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
-		super.init(site, memento);	
+		super.init(site, memento);
 		this.memento = memento;
 	}
 

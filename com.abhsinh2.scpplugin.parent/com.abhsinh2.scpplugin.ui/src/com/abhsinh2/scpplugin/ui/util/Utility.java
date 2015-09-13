@@ -18,6 +18,12 @@ import com.abhsinh2.scpplugin.ui.model.local.ILocalLocation;
 import com.abhsinh2.scpplugin.ui.model.local.LocalFileType;
 import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 
+/**
+ * Utility class.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class Utility {
 
 	public static Collection<String> getSelectedFiles(
@@ -81,7 +87,7 @@ public class Utility {
 		}
 
 		Object[] selectedObjs = selection.toArray();
-		
+
 		if (selectedObjs.length > 0) {
 			List<Location> locations = new ArrayList<Location>();
 
@@ -94,10 +100,9 @@ public class Utility {
 
 			return locations;
 		}
-		
+
 		return null;
 	}
-	
 
 	/**
 	 * Open an editor on the first selected element

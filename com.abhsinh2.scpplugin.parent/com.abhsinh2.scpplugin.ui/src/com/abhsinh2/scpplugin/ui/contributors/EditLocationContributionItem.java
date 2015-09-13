@@ -24,6 +24,13 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
 
+/**
+ * Context Menu on View to show Edit Button. Edit Button used to edit current
+ * selected location.
+ * 
+ * @author abhsinh2
+ * 
+ */
 public class EditLocationContributionItem extends ContributionItem {
 	private final IViewSite viewSite;
 	private final IHandler handler;
@@ -40,12 +47,12 @@ public class EditLocationContributionItem extends ContributionItem {
 						ISelection selection = event.getSelection();
 						if (selection instanceof IStructuredSelection) {
 							IStructuredSelection strucSel = (IStructuredSelection) selection;
-							
+
 							if (!strucSel.isEmpty() && strucSel.size() < 2) {
 								enabled = true;
 								updateEnablement();
-							}							
-						}						
+							}
+						}
 					}
 				});
 	}
