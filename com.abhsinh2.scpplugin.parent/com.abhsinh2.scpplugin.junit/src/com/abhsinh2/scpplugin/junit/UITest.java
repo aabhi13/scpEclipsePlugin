@@ -42,12 +42,21 @@ public class UITest {
 		} catch (WidgetNotFoundException e) {
 			// ignore
 		}
-		bot.menu("File").menu("Project...").click();
+		
+		bot.menu("File").menu("New").menu("Project...").click();
 		SWTBotShell shell = bot.shell("New Project");
 		shell.activate();
 		bot.tree().expandNode("General").select("Project");
 		bot.button("Next >").click();
 		bot.textWithLabel("Project name:").setText("SWTBot Test Project");
+		bot.button("Finish").click();
+		
+		bot.menu("File").menu("File").click();
+		bot.textWithLabel("File name:").setText("Test1.txt");
+		bot.button("Finish").click();
+		
+		bot.menu("File").menu("File").click();
+		bot.textWithLabel("File name:").setText("Test2.txt");
 		bot.button("Finish").click();
 	}
 }
