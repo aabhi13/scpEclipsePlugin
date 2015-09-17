@@ -13,6 +13,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IMemento;
 
 /**
+ * Sorter to sort table in view.
+ * 
+ * @author abhsinh2
  * 
  */
 public class LocationViewSorter extends ViewerSorter {
@@ -21,8 +24,7 @@ public class LocationViewSorter extends ViewerSorter {
 	private static final String TAG_TYPE = "SortInfo";
 	private static final String TAG_TRUE = "true";
 
-	// Simple data structure for grouping
-	// sort information by column.
+	// sort data by column.
 	private class SortInfo {
 		int columnIndex;
 		Comparator<Object> comparator;

@@ -1,4 +1,4 @@
-package com.abhsinh2.scpplugin.ui.util;
+package com.abhsinh2.scpplugin.ui.copy;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;

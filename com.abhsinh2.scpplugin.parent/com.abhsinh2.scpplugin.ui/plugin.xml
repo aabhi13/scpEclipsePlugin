@@ -7,7 +7,7 @@
             id="com.abhsinh2.scpplugin.ui.command.copy"
             name="Copy">
          <defaultHandler
-               class="com.abhsinh2.scpplugin.ui.handlers.CopyHandler">
+               class="com.abhsinh2.scpplugin.ui.handlers.OpenLocationWizardHandler">
          </defaultHandler>
       </command>
    </extension>
@@ -21,7 +21,6 @@
                label="SCP">
             <command
                   commandId="com.abhsinh2.scpplugin.ui.command.copy"
-                  icon="icons/sample.gif"
                   label="Copy"
                   style="push">
                <visibleWhen
@@ -56,10 +55,20 @@
       </category>
       <view
             category="com.abhsinh2.scpplugin.ui"
-            class="com.abhsinh2.scpplugin.ui.view.SCPView"
+            class="com.abhsinh2.scpplugin.ui.view.LocationView"
             id="com.abhsinh2.scpplugin.ui.SCPView"
             name="SCP"
             restorable="true">
       </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.abhsinh2.scpplugin.ui"
+            name="Location"/>
+      <wizard
+            class="com.abhsinh2.scpplugin.ui.wizard.SelectLocationWizard"
+            id="com.abhsinh2.scpplugin.ui.selectLocationWizard"
+            name="Select Location"/>
    </extension>
 </plugin>

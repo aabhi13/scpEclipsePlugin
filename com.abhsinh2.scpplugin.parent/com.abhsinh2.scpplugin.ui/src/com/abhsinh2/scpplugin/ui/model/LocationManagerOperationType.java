@@ -1,5 +1,5 @@
 package com.abhsinh2.scpplugin.ui.model;
 
-public enum SCPLocationManagerType {
+public enum LocationManagerOperationType {
 	ADDED, UPDATED, DELETED;
 }

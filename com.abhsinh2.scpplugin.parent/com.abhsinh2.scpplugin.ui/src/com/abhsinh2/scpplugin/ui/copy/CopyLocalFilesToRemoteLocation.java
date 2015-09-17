@@ -1,4 +1,4 @@
-package com.abhsinh2.scpplugin.ui.util;
+package com.abhsinh2.scpplugin.ui.copy;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,21 +6,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.abhsinh2.scpplugin.ui.Logger;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-public class SCPCopyLocalToRemote {
+/**
+ * Copies local files to remote machine on remote location.
+ * 
+ * @author abhsinh2
+ * 
+ */
+public class CopyLocalFilesToRemoteLocation {
 
-	String localFile;
-	String remoteMachine;
-	String remoteLocation;
-	String username;
-	String password;
+	private String localFile;
+	private String remoteMachine;
+	private String remoteLocation;
+	private String username;
+	private String password;
 
-	public SCPCopyLocalToRemote(String localFile, String remoteMachine,
-			String remoteLocation, String username, String password) {
+	public CopyLocalFilesToRemoteLocation(String localFile,
+			String remoteMachine, String remoteLocation, String username,
+			String password) {
 		this.localFile = localFile;
 		this.remoteMachine = remoteMachine;
 		this.remoteLocation = remoteLocation;
@@ -29,32 +37,29 @@ public class SCPCopyLocalToRemote {
 	}
 
 	public void copy() {
-		System.out.println(this.toString());
-		
 		FileInputStream fis = null;
 		try {
 			JSch jsch = new JSch();
-			
+
 			String userHomeDir = System.getProperty("user.home");
 			String SSH_DIR = ".ssh";
 			String KNOWN_HOSTS = "known_hosts";
 			String ID_RSA = "id_rsa";
-			
-			File knowHostsFile = new File(userHomeDir + java.io.File.separator + SSH_DIR + java.io.File.separator + KNOWN_HOSTS);
-			File idRSAFile = new File(userHomeDir + java.io.File.separator + SSH_DIR + java.io.File.separator + ID_RSA);			
-			
-			System.out.println("knowHostsFile:" + knowHostsFile.getPath());
-			System.out.println("idRSAFile:" + idRSAFile.getPath());
-			
-			jsch.setKnownHosts(knowHostsFile.getPath());			
+
+			File knowHostsFile = new File(userHomeDir + java.io.File.separator
+					+ SSH_DIR + java.io.File.separator + KNOWN_HOSTS);
+			File idRSAFile = new File(userHomeDir + java.io.File.separator
+					+ SSH_DIR + java.io.File.separator + ID_RSA);
+
+			jsch.setKnownHosts(knowHostsFile.getPath());
 			jsch.addIdentity(idRSAFile.getPath());
-			
-			java.util.Properties config = new java.util.Properties(); 
-			config.put("StrictHostKeyChecking", "no");			
-			
+
+			java.util.Properties config = new java.util.Properties();
+			config.put("StrictHostKeyChecking", "no");
+
 			Session session = jsch.getSession(username, remoteMachine, 22);
 			session.setConfig(config);
-			
+
 			// username and password will be given via UserInfo interface.
 			RemoteUserInfo ui = new RemoteUserInfo(this.password);
 			session.setUserInfo(ui);
@@ -76,7 +81,6 @@ public class SCPCopyLocalToRemote {
 			channel.connect();
 
 			if (checkAck(in) != 0) {
-				System.out.println("Exiting 1");
 				System.exit(0);
 			}
 
@@ -90,7 +94,6 @@ public class SCPCopyLocalToRemote {
 				out.write(command.getBytes());
 				out.flush();
 				if (checkAck(in) != 0) {
-					System.out.println("Exiting 2");
 					System.exit(0);
 				}
 			}
@@ -109,7 +112,6 @@ public class SCPCopyLocalToRemote {
 			out.write(command.getBytes());
 			out.flush();
 			if (checkAck(in) != 0) {
-				System.out.println("Exiting 3");
 				System.exit(0);
 			}
 
@@ -129,18 +131,14 @@ public class SCPCopyLocalToRemote {
 			out.write(buf, 0, 1);
 			out.flush();
 			if (checkAck(in) != 0) {
-				System.out.println("Exiting 4");
 				System.exit(0);
 			}
 			out.close();
 
 			channel.disconnect();
 			session.disconnect();
-
-			//System.exit(0);
 		} catch (Exception e) {
-			System.out.println(e);
-			e.printStackTrace();
+			Logger.logError(e);
 			try {
 				if (fis != null)
 					fis.close();
@@ -179,7 +177,7 @@ public class SCPCopyLocalToRemote {
 
 	@Override
 	public String toString() {
-		return "SCPCopyLocalToRemote [localFile=" + localFile
+		return "CopyLocalFilesToRemoteLocation [localFile=" + localFile
 				+ ", remoteMachine=" + remoteMachine + ", remoteLocation="
 				+ remoteLocation + ", username=" + username + ", password="
 				+ password + "]";

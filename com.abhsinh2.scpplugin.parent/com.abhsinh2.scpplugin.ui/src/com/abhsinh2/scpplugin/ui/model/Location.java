@@ -4,15 +4,21 @@ import java.util.Collection;
 
 import org.eclipse.core.runtime.IAdaptable;
 
-import com.abhsinh2.scpplugin.ui.model.remote.SCPRemoteLocation;
+import com.abhsinh2.scpplugin.ui.model.remote.RemoteLocation;
 
-public class SCPLocation implements IAdaptable {
+/**
+ * POJO to store remote machine and local files details.
+ * 
+ * @author abhsinh2
+ * 
+ */
+public class Location implements IAdaptable {
 	private String name;
 	private Collection<String> localFiles;
-	private SCPRemoteLocation remoteLocation;
+	private RemoteLocation remoteLocation;
 
-	public SCPLocation(String name, Collection<String> localFiles,
-			SCPRemoteLocation remoteLocation) {
+	public Location(String name, Collection<String> localFiles,
+			RemoteLocation remoteLocation) {
 		super();
 		this.name = name;
 		this.localFiles = localFiles;
@@ -35,11 +41,11 @@ public class SCPLocation implements IAdaptable {
 		this.localFiles = localFiles;
 	}
 
-	public SCPRemoteLocation getRemoteLocation() {
+	public RemoteLocation getRemoteLocation() {
 		return remoteLocation;
 	}
 
-	public void setRemoteLocation(SCPRemoteLocation remoteLocation) {
+	public void setRemoteLocation(RemoteLocation remoteLocation) {
 		this.remoteLocation = remoteLocation;
 	}
 

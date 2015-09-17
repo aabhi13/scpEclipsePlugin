@@ -29,24 +29,25 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerEvent;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerListener;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManagerType;
-import com.abhsinh2.scpplugin.ui.util.SCPCopyLocalToRemote;
+import com.abhsinh2.scpplugin.ui.Logger;
+import com.abhsinh2.scpplugin.ui.copy.CopyLocalFilesToRemoteLocation;
+import com.abhsinh2.scpplugin.ui.model.Location;
+import com.abhsinh2.scpplugin.ui.model.LocationManager;
+import com.abhsinh2.scpplugin.ui.model.LocationManagerEvent;
+import com.abhsinh2.scpplugin.ui.model.LocationManagerListener;
+import com.abhsinh2.scpplugin.ui.model.LocationManagerOperationType;
 
 public class LocationDialog extends Dialog {
 
 	private Shell parentShell;
 	private ExecutionEvent event;
-	private SCPLocationManager locationManager = SCPLocationManager
+	private LocationManager locationManager = LocationManager
 			.getManager();
 
 	private Combo locationsCombo;
-	private SCPLocationManagerListener listener;
+	private LocationManagerListener listener;
 
-	private SCPLocation remoteLocation;
+	private Location remoteLocation;
 	private Collection<String> currentSelectedLocation;
 
 	public static final String REMOTE_MACHINE_STRING = "Remote Machine:";
@@ -69,11 +70,6 @@ public class LocationDialog extends Dialog {
 	
 	private Button okButton;
 
-	/**
-	 * Create the dialog.
-	 * 
-	 * @param parentShell
-	 */
 	public LocationDialog(Shell parentShell, ExecutionEvent event, Collection<String> localLocations) {
 		super(parentShell);
 
@@ -81,12 +77,7 @@ public class LocationDialog extends Dialog {
 		this.event = event;
 		this.currentSelectedLocation = localLocations;
 	}
-
-	/**
-	 * Create contents of the dialog.
-	 * 
-	 * @param parent
-	 */
+	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 
@@ -125,7 +116,7 @@ public class LocationDialog extends Dialog {
 
 		fd_locationsCombo.bottom = new FormAttachment(100, -248);
 
-		for (SCPLocation location : locationManager.getLocations()) {
+		for (Location location : locationManager.getLocations()) {
 			locationsCombo.add(location.getName());
 		}
 	}
@@ -225,7 +216,7 @@ public class LocationDialog extends Dialog {
 	private void addLocationSelectionListener() {
 		locationsCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				SCPLocation location = locationManager
+				Location location = locationManager
 						.getLocation(locationsCombo.getText());
 				if (location != null) {
 					remoteLocation = location;
@@ -242,11 +233,11 @@ public class LocationDialog extends Dialog {
 
 	private void addSCPLocationManagerListener() {
 		if (listener == null) {
-			listener = new SCPLocationManagerListener() {
+			listener = new LocationManagerListener() {
 				@Override
-				public void locationChanged(SCPLocationManagerEvent event) {
-					if (event.getEventType() == SCPLocationManagerType.ADDED) {
-						SCPLocation location = event.getLocation();
+				public void locationChanged(LocationManagerEvent event) {
+					if (event.getEventType() == LocationManagerOperationType.ADDED) {
+						Location location = event.getLocation();
 						
 						if (!parentShell.isDisposed()) {
 							locationsCombo.add(location.getName());
@@ -261,12 +252,7 @@ public class LocationDialog extends Dialog {
 			locationManager.addLocationManagerListener(listener);
 		}
 	}
-
-	/**
-	 * Create contents of the button bar.
-	 * 
-	 * @param parent
-	 */
+	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
@@ -277,29 +263,26 @@ public class LocationDialog extends Dialog {
 	}
 
 	@Override
-	protected void okPressed() {
-		
+	protected void okPressed() {		
 		if (useCurrentSelection) {
 			//staryCopying(currentSelectedLocation);
 			startCopyingInProgressDialog(currentSelectedLocation);
 		} else if (useSavedLocation) {
 			//staryCopying(remoteLocation.getLocalFiles());
 			startCopyingInProgressDialog(remoteLocation.getLocalFiles());
-		}
-		
+		}		
 		super.okPressed();
 	}
 
 	private IStatus staryCopying(final Collection<String> fileList) {
 		if (fileList == null) {
-			System.out.println("Cancelling");
 			return Status.CANCEL_STATUS;
 		}
 
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				for (String localLocation : fileList) {
-					SCPCopyLocalToRemote copy = new SCPCopyLocalToRemote(
+					CopyLocalFilesToRemoteLocation copy = new CopyLocalFilesToRemoteLocation(
 							localLocation, remoteLocation.getRemoteLocation()
 									.getRemoteAddress(), remoteLocation
 									.getRemoteLocation().getRemoteLocation(),
@@ -321,7 +304,6 @@ public class LocationDialog extends Dialog {
 	
 	private IStatus startCopyingWithJob(final Collection<String> fileList) {
 		if (fileList == null) {
-			System.out.println("Cancelling");
 			return Status.CANCEL_STATUS;
 		}
 
@@ -341,7 +323,7 @@ public class LocationDialog extends Dialog {
 								
 								//subMonitor.subTask("Doing something");
 								
-								SCPCopyLocalToRemote copy = new SCPCopyLocalToRemote(
+								CopyLocalFilesToRemoteLocation copy = new CopyLocalFilesToRemoteLocation(
 										localLocation, remoteLocation
 												.getRemoteLocation()
 												.getRemoteAddress(), remoteLocation
@@ -406,7 +388,7 @@ public class LocationDialog extends Dialog {
 						for (String localLocation : fileList) {
 							monitor.subTask("Copying " + localLocation);
 
-							SCPCopyLocalToRemote copy = new SCPCopyLocalToRemote(
+							CopyLocalFilesToRemoteLocation copy = new CopyLocalFilesToRemoteLocation(
 									localLocation, remoteLocation
 											.getRemoteLocation()
 											.getRemoteAddress(), remoteLocation
@@ -433,13 +415,12 @@ public class LocationDialog extends Dialog {
 				}
 			});
 		} catch (Exception e) {
-			System.out.println(e);
+			Logger.logError(e);
 		}
 	}
 	
 	private IStatus startCopyingWithIProgressService(final Collection<String> fileList) {
 		if (fileList == null) {
-			System.out.println("Cancelling");
 			return Status.CANCEL_STATUS;
 		}
 		
@@ -455,7 +436,7 @@ public class LocationDialog extends Dialog {
 									for (String localLocation : fileList) {
 										monitor.subTask("Copying " + localLocation);
 
-										SCPCopyLocalToRemote copy = new SCPCopyLocalToRemote(
+										CopyLocalFilesToRemoteLocation copy = new CopyLocalFilesToRemoteLocation(
 												localLocation, remoteLocation
 														.getRemoteLocation()
 														.getRemoteAddress(), remoteLocation
@@ -499,11 +480,11 @@ public class LocationDialog extends Dialog {
 		return locationsCombo;
 	}
 
-	public SCPLocation getRemoteLocation() {
+	public Location getRemoteLocation() {
 		return remoteLocation;
 	}
 
-	public void setRemoteLocation(SCPLocation remoteLocation) {
+	public void setRemoteLocation(Location remoteLocation) {
 		this.remoteLocation = remoteLocation;
 	}
 }
