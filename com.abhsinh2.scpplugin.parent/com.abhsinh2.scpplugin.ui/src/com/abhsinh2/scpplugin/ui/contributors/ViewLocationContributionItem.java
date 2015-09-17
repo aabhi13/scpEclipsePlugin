@@ -7,7 +7,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.jface.action.ContributionItem;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,34 +25,41 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
 
 /**
- * Toolbar Action on View to show Remove Button. Remove button used to remove
- * selected location.
+ * Context Menu on View to show View Button. View Button is used to view
+ * selected location details.
  * 
  * @author abhsinh2
  * 
  */
-public class RemoveLocationContributionItem extends ContributionItem {
+public class ViewLocationContributionItem extends ContributionItem {
 	private final IViewSite viewSite;
 	private final IHandler handler;
 	boolean enabled = false;
 	private MenuItem menuItem;
 	private ToolItem toolItem;
 
-	public RemoveLocationContributionItem(IViewSite viewSite, IHandler handler) {
+	public ViewLocationContributionItem(IViewSite viewSite, IHandler handler) {
 		this.handler = handler;
 		this.viewSite = viewSite;
 		viewSite.getSelectionProvider().addSelectionChangedListener(
 				new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent event) {
-						enabled = !event.getSelection().isEmpty();
-						updateEnablement();
+						ISelection selection = event.getSelection();
+						if (selection instanceof IStructuredSelection) {
+							IStructuredSelection strucSel = (IStructuredSelection) selection;
+
+							if (!strucSel.isEmpty() && strucSel.size() < 2) {
+								enabled = true;
+								updateEnablement();
+							}
+						}
 					}
 				});
 	}
 
 	public void fill(Menu menu, int index) {
 		menuItem = new MenuItem(menu, SWT.NONE, index);
-		menuItem.setText("Remove");
+		menuItem.setText("View");
 		menuItem.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				run();
@@ -61,7 +70,6 @@ public class RemoveLocationContributionItem extends ContributionItem {
 
 	public void fill(ToolBar parent, int index) {
 		toolItem = new ToolItem(parent, SWT.NONE, index);
-		toolItem.setToolTipText("Remove selected Locations");
 		toolItem.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				run();
@@ -75,14 +83,15 @@ public class RemoveLocationContributionItem extends ContributionItem {
 				.getWorkbench()
 				.getSharedImages()
 				.getImage(
-						enabled ? ISharedImages.IMG_TOOL_DELETE
+						enabled ? ISharedImages.IMG_TOOL_COPY
 								: ISharedImages.IMG_TOOL_DELETE_DISABLED);
 		if (menuItem != null) {
-			menuItem.setImage(image);
+			// menuItem.setImage(image);
 			menuItem.setEnabled(enabled);
 		}
+
 		if (toolItem != null) {
-			toolItem.setImage(image);
+			// toolItem.setImage(image);
 			toolItem.setEnabled(enabled);
 		}
 	}

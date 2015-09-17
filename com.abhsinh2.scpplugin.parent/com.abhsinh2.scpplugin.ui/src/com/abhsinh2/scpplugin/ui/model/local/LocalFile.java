@@ -5,25 +5,30 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
-public class SCPLocalResource implements ISCPLocalLocation {
+/**
+ * POJO for any local file.
+ * 
+ * @author abhsinh2
+ * 
+ */
+public class LocalFile implements ILocalLocation {
 
-	private SCPLocalFileType type;
+	private LocalFileType type;
 	private IResource resource;
 	private String name;
 
-	SCPLocalResource(SCPLocalFileType type, IResource resource) {
+	LocalFile(LocalFileType type, IResource resource) {
 		this.type = type;
 		this.resource = resource;
 	}
 
-	public static SCPLocalResource loadFavorite(SCPLocalFileType type,
-			String info) {
+	public static LocalFile loadFavorite(LocalFileType type, String info) {
 		IResource res = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(info));
 		if (res == null)
 			return null;
 
-		return new SCPLocalResource(type, res);
+		return new LocalFile(type, res);
 	}
 
 	public String getName() {
@@ -38,22 +43,21 @@ public class SCPLocalResource implements ISCPLocalLocation {
 
 	public String getLocation() {
 		/*
-		IPath path = resource.getLocation().removeLastSegments(1);
-		if (path.segmentCount() == 0)
-			return "";
-		return path.toString();*/
-		
+		 * IPath path = resource.getLocation().removeLastSegments(1); if
+		 * (path.segmentCount() == 0) return ""; return path.toString();
+		 */
+
 		return resource.getLocation().toString();
 	}
 
-	public SCPLocalFileType getType() {
+	public LocalFileType getType() {
 		return type;
 	}
 
 	public boolean equals(Object obj) {
 		return this == obj
-				|| ((obj instanceof SCPLocalResource) && resource
-						.equals(((SCPLocalResource) obj).resource));
+				|| ((obj instanceof LocalFile) && resource
+						.equals(((LocalFile) obj).resource));
 	}
 
 	public int hashCode() {

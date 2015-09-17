@@ -3,7 +3,6 @@ package com.abhsinh2.scpplugin.ui.view;
 import java.util.Comparator;
 
 import org.eclipse.core.commands.IHandler;
-import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -35,7 +34,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.IHandlerActivation;
@@ -43,16 +41,27 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.IWorkbenchActionDefinitionIds;
 
-import com.abhsinh2.scpplugin.ui.actions.SCPViewFilterAction;
+import com.abhsinh2.scpplugin.ui.actions.ViewFilterAction;
+import com.abhsinh2.scpplugin.ui.contributors.EditLocationContributionItem;
 import com.abhsinh2.scpplugin.ui.contributors.RemoveLocationContributionItem;
+import com.abhsinh2.scpplugin.ui.contributors.ViewLocationContributionItem;
+import com.abhsinh2.scpplugin.ui.handlers.EditLocationHandler;
 import com.abhsinh2.scpplugin.ui.handlers.RemoveLocationHandler;
-import com.abhsinh2.scpplugin.ui.model.SCPLocation;
-import com.abhsinh2.scpplugin.ui.model.SCPLocationManager;
-import com.abhsinh2.scpplugin.ui.model.local.ISCPLocalLocation;
-import com.abhsinh2.scpplugin.ui.provider.SCPLocationTableLabelProvider;
-import com.abhsinh2.scpplugin.ui.provider.SCPViewContentProvider;
+import com.abhsinh2.scpplugin.ui.handlers.ViewLocationHandler;
+import com.abhsinh2.scpplugin.ui.model.Location;
+import com.abhsinh2.scpplugin.ui.model.LocationManager;
+import com.abhsinh2.scpplugin.ui.model.local.ILocalLocation;
+import com.abhsinh2.scpplugin.ui.provider.LocationViewTableLabelProvider;
+import com.abhsinh2.scpplugin.ui.provider.LocationViewTableContentProvider;
+import com.abhsinh2.scpplugin.ui.util.Utility;
 
-public class SCPView extends ViewPart {
+/**
+ * Defines View when locations can be viewed, edited or removed.
+ * 
+ * @author abhsinh2
+ * 
+ */
+public class LocationView extends ViewPart {
 
 	public static final String ID = "com.abhsinh2.scpplugin.ui.SCPView";
 
@@ -64,13 +73,19 @@ public class SCPView extends ViewPart {
 
 	private LocationViewSorter sorter;
 	private IMemento memento;
-	private SCPViewFilterAction filterAction;
+	private ViewFilterAction filterAction;
 
 	private IHandler removeHandler;
+	private IHandler editHandler;
+	private IHandler viewHandler;
+
 	private RemoveLocationContributionItem removeContributionItem;
+	private EditLocationContributionItem editContributionItem;
+	private ViewLocationContributionItem viewContributionItem;
+
 	private ISelectionListener pageSelectionListener;
 
-	public SCPView() {
+	public LocationView() {
 	}
 
 	public void createPartControl(Composite parent) {
@@ -79,7 +94,7 @@ public class SCPView extends ViewPart {
 		createContributions();
 		createContextMenu();
 		createToolbarButtons();
-		createViewPulldownMenu();
+		// createViewPulldownMenu();
 		hookGlobalHandlers();
 		createInlineEditor();
 		hookMouse();
@@ -109,16 +124,16 @@ public class SCPView extends ViewPart {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(false);
 
-		tableViewer.setContentProvider(new SCPViewContentProvider());
-		tableViewer.setLabelProvider(new SCPLocationTableLabelProvider());
-		tableViewer.setInput(SCPLocationManager.getManager());
+		tableViewer.setContentProvider(new LocationViewTableContentProvider());
+		tableViewer.setLabelProvider(new LocationViewTableLabelProvider());
+		tableViewer.setInput(LocationManager.getManager());
 
 		getSite().setSelectionProvider(tableViewer);
 	}
 
 	private void createTableSorter() {
-		Comparator<ISCPLocalLocation> nameComparator = new Comparator<ISCPLocalLocation>() {
-			public int compare(ISCPLocalLocation i1, ISCPLocalLocation i2) {
+		Comparator<Location> nameComparator = new Comparator<Location>() {
+			public int compare(Location i1, Location i2) {
 				return i1.getName().compareTo(i2.getName());
 			}
 		};
@@ -134,8 +149,15 @@ public class SCPView extends ViewPart {
 
 	private void createContributions() {
 		removeHandler = new RemoveLocationHandler();
+		editHandler = new EditLocationHandler();
+		viewHandler = new ViewLocationHandler();
+
 		removeContributionItem = new RemoveLocationContributionItem(
 				getViewSite(), removeHandler);
+		editContributionItem = new EditLocationContributionItem(getViewSite(),
+				editHandler);
+		viewContributionItem = new ViewLocationContributionItem(getViewSite(),
+				viewHandler);
 	}
 
 	private void createContextMenu() {
@@ -143,7 +165,7 @@ public class SCPView extends ViewPart {
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager m) {
-				SCPView.this.fillContextMenu(m);
+				LocationView.this.fillContextMenu(m);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(tableViewer.getControl());
@@ -152,21 +174,23 @@ public class SCPView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager menuMgr) {
+		// menuMgr.add(new Separator(""));
+		menuMgr.add(viewContributionItem);
 		menuMgr.add(new Separator("edit"));
-		menuMgr.add(removeContributionItem);
-		menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		menuMgr.add(editContributionItem);
+		// menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void createToolbarButtons() {
 		IToolBarManager toolBarMgr = getViewSite().getActionBars()
 				.getToolBarManager();
-		toolBarMgr.add(new GroupMarker("edit"));
+		// toolBarMgr.add(new GroupMarker("edit"));
 		toolBarMgr.add(removeContributionItem);
 	}
 
 	private void createViewPulldownMenu() {
 		IMenuManager menu = getViewSite().getActionBars().getMenuManager();
-		filterAction = new SCPViewFilterAction(tableViewer, "Filter...");
+		filterAction = new ViewFilterAction(tableViewer, "Filter...");
 		if (memento != null)
 			filterAction.init(memento);
 		menu.add(filterAction);
@@ -190,8 +214,8 @@ public class SCPView extends ViewPart {
 	 */
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
-		//sorter.saveState(memento);
-		//filterAction.saveState(memento);
+		// sorter.saveState(memento);
+		// filterAction.saveState(memento);
 	}
 
 	private void hookPageSelection() {
@@ -211,18 +235,19 @@ public class SCPView extends ViewPart {
 		if (!(selection instanceof IStructuredSelection))
 			return;
 		IStructuredSelection sel = (IStructuredSelection) selection;
-		ISCPLocalLocation[] items = SCPLocationManager.getManager()
+		ILocalLocation[] items = LocationManager.getManager()
 				.existingLocationFor(sel.iterator());
 		if (items.length > 0)
 			tableViewer.setSelection(new StructuredSelection(items), true);
 	}
 
 	private void createInlineEditor() {
-		TableViewerColumn column = new TableViewerColumn(tableViewer, nameColumn);
+		TableViewerColumn column = new TableViewerColumn(tableViewer,
+				nameColumn);
 
 		column.setLabelProvider(new ColumnLabelProvider() {
 			public String getText(Object element) {
-				return ((SCPLocation) element).getName();
+				return ((Location) element).getName();
 			}
 		});
 
@@ -242,11 +267,11 @@ public class SCPView extends ViewPart {
 			}
 
 			protected Object getValue(Object element) {
-				return ((ISCPLocalLocation) element).getName();
+				return ((ILocalLocation) element).getName();
 			}
 
 			protected void setValue(Object element, Object value) {
-				((ISCPLocalLocation) element).setName((String) value);
+				((ILocalLocation) element).setName((String) value);
 				tableViewer.refresh(element);
 			}
 		});
@@ -284,31 +309,34 @@ public class SCPView extends ViewPart {
 	private void hookGlobalHandlers() {
 		final IHandlerService handlerService = (IHandlerService) getViewSite()
 				.getService(IHandlerService.class);
-		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			private IHandlerActivation removeActivation;
+		tableViewer
+				.addSelectionChangedListener(new ISelectionChangedListener() {
+					private IHandlerActivation removeActivation;
 
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (event.getSelection().isEmpty()) {
-					if (removeActivation != null) {
-						handlerService.deactivateHandler(removeActivation);
-						removeActivation = null;
+					public void selectionChanged(SelectionChangedEvent event) {
+						if (event.getSelection().isEmpty()) {
+							if (removeActivation != null) {
+								handlerService
+										.deactivateHandler(removeActivation);
+								removeActivation = null;
+							}
+						} else {
+							if (removeActivation == null) {
+								removeActivation = handlerService
+										.activateHandler(
+												IWorkbenchActionDefinitionIds.DELETE,
+												removeHandler);
+							}
+						}
 					}
-				} else {
-					if (removeActivation == null) {
-						removeActivation = handlerService.activateHandler(
-								IWorkbenchActionDefinitionIds.DELETE,
-								removeHandler);
-					}
-				}
-			}
-		});
+				});
 	}
 
 	private void hookMouse() {
 		tableViewer.getTable().addMouseListener(new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent e) {
-				com.abhsinh2.scpplugin.ui.util.EditorUtil.openEditor(getSite()
-						.getPage(), tableViewer.getSelection());
+				Utility.openEditor(getSite().getPage(),
+						tableViewer.getSelection());
 			}
 		});
 	}
@@ -321,7 +349,7 @@ public class SCPView extends ViewPart {
 	 * for later.
 	 */
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
-		super.init(site, memento);	
+		super.init(site, memento);
 		this.memento = memento;
 	}
 
