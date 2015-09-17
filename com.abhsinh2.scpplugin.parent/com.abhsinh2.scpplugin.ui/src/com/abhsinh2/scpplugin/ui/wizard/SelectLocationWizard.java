@@ -206,7 +206,7 @@ public class SelectLocationWizard extends Wizard implements INewWizard {
 						remoteLocation.getRemoteLocation(),
 						remoteLocation.getUsername(), password);
 
-				// copy.copy();
+				copy.copy();
 
 				monitor.worked(1);
 
